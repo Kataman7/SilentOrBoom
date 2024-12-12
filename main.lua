@@ -1,10 +1,12 @@
 function _init()
+    generate_cave()
+
     player = {
         h = 8,
         w = 8,
         velx = 0,
         vely = 0,
-        x = 0,
+        x = 10,
         y = 0,
         speed = 0.2,
         jump_f = 5,
@@ -12,7 +14,7 @@ function _init()
         jump_c = 0,
         jump_m = 3,
         sprite = 1,
-        gravity = 0.6
+        gravity = 0.4
     }
 end
 

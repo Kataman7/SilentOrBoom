@@ -1,6 +1,5 @@
 -->8
 function map_position(x, y)
-    -- conversion simple des coordonnれたes en cases de carte
     x = flr(x / 8)
     y = flr(y / 8)
     return { x = x, y = y }
@@ -11,11 +10,11 @@ function check_collision(x, y)
     local top_right = map_position(x + player.w - 1, y)
     local bottom_left = map_position(x, y + player.h - 1)
     local bottom_right = map_position(x + player.w - 1, y + player.h - 1)
-
-    return mget(top_left.x, top_left.y) >= 48
-            or mget(top_right.x, top_right.y) >= 48
-            or mget(bottom_left.x, bottom_left.y) >= 48
-            or mget(bottom_right.x, bottom_right.y) >= 48
+    local flag = 0
+    return fget(mget(top_left.x, top_left.y, 1), flag)
+            or fget(mget(top_right.x, top_right.y), flag)
+            or fget(mget(bottom_left.x, bottom_left.y), flag)
+            or fget(mget(bottom_right.x, bottom_right.y), flag)
 end
 
 function player_control()
