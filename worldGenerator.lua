@@ -95,7 +95,7 @@ end
 function generate_cave()
     local livingTile = 51
     local deadTile = 0
-    random_initialization(0.55, livingTile, deadTile)
+    random_initialization(0.53, livingTile, deadTile)
     for i = 1, 5 do
         next_cave_generation(livingTile, deadTile)
     end
@@ -115,4 +115,23 @@ function generate_word()
     generate_mineral(54, 0.1)
     generate_mineral(55, 0.1)
     generate_mineral(34, 0.1)
+    vine_generation()
+end
+
+function vine_generation()
+    for i = 1, 128 do
+        for j = 2, 32 do
+            if (mget(i, j) == 0) then
+                if (mget(i, j-1) == 51) then
+                    if (rnd(1) < 0.2) then
+                        local k = j
+                        while (mget(i, k) == 0 and k < 32) do
+                            mset(i, k, 53)
+                            k+=1
+                        end
+                    end
+                end
+            end
+        end
+    end
 end
