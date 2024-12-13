@@ -1,31 +1,30 @@
 function _init()
-    generate_cave()
-
-    player = {
-        h = 8,
-        w = 8,
-        velx = 0,
-        vely = 0,
-        x = 10,
-        y = 0,
-        speed = 0.2,
-        jump_f = 5,
-        frict = 0.85,
-        jump_c = 0,
-        jump_m = 3,
-        sprite = 1,
-        gravity = 0.4
-    }
+    player = Player:new()
+    dcam = Camera:new()
+    transition = Transition:new(60, "Loading...")
 end
 
 function _update60()
-    player_control()
-    player_update()
+
+    player:update()
+    dcam:update()
+
+    if (player.y / 8 > 40) then
+        player.y = 0
+        player.x = 64 * 8
+        generate_word()
+    end
+    
 end
 
 function _draw()
-    cls()
-    dcam()
-    spr(player.sprite, player.x, player.y)
-    map()
+    if (transition:active()) then
+        transition:draw()
+        return
+    end
+
+    dcam:draw()
+    cls(12)
+    player:draw()
+    map()            
 end

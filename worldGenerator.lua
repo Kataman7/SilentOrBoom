@@ -1,17 +1,23 @@
--- Initialise une grille avec des valeurs aléatoires
+function clear_tilemap()
+    for i = 1, 128 do
+        for j = 1, 32 do
+            mset(i, j, 0)
+        end
+    end
+end
+
 function random_initialization(chance, livingTile, deadTile)
     for i = 1, 128 do
         for j = 1, 32 do
-            if rnd(1) < chance then
-                mset(i, j, livingTile) -- Tuile vivante
-            else
-                mset(i, j, deadTile) -- Tuile morte
+            if (mget(i, j) == deadTile) then
+                if rnd(1) < chance then
+                    mset(i, j, livingTile)
+                end
             end
         end
     end
 end
 
--- Compte les voisins ayant une certaine valeur
 function neighbor_count(x, y, livingTile)
     local count = 0
     for i = -1, 1 do
@@ -26,8 +32,7 @@ function neighbor_count(x, y, livingTile)
     return count
 end
 
--- Applique une itération de l'automate
-function apply_rule(livingTile, deadTile)
+function next_cave_generation(livingTile, deadTile)
     local tempGrid = {}
     for i = 1, 128 do
         tempGrid[i] = {}
@@ -35,15 +40,12 @@ function apply_rule(livingTile, deadTile)
             local neighbors = neighbor_count(i, j, livingTile)
             local tile = mget(i, j)
             if tile == livingTile then
-                -- Reste vivant si >= 4 voisins
                 tempGrid[i][j] = (neighbors >= 4) and livingTile or deadTile
             else
-                -- Devient vivant si >= 5 voisins
                 tempGrid[i][j] = (neighbors >= 5) and livingTile or deadTile
             end
         end
     end
-    -- Mise à jour de la grille
     for i = 1, 128 do
         for j = 1, 32 do
             mset(i, j, tempGrid[i][j])
@@ -51,12 +53,66 @@ function apply_rule(livingTile, deadTile)
     end
 end
 
--- Génération de la carte
-function generate_cave()
-    local livingTile = 51 -- Paramètre pour la tuile vivante
-    local deadTile = 0 -- Paramètre pour la tuile morte
-    random_initialization(0.48, livingTile, deadTile) -- 45% de chance de commencer vivant
-    for i = 1, 5 do
-        apply_rule(livingTile, deadTile) -- Appliquer la règle 5 fois
+function next_conway_generation(livingTile, deadTile, min, max, birth)
+    local tempGrid = {}
+    for i = 1, 128 do
+        tempGrid[i] = {}
+        for j = 1, 32 do
+            local neighbors = neighbor_count(i, j, livingTile)
+            local tile = mget(i, j)
+            if tile == livingTile then
+                tempGrid[i][j] = (neighbors >= min and neighbors <= max) and livingTile or deadTile
+            elseif tile == deadTile then
+                tempGrid[i][j] = (neighbors == birth) and livingTile or deadTile
+            end
+        end
     end
+    for i = 1, 128 do
+        for j = 1, 32 do
+            if (tempGrid[i][j] == livingTile or tempGrid[i][j] == deadTile) then
+                mset(i, j, tempGrid[i][j])
+            end
+        end
+    end
+end
+
+function generate_land()
+    local grassTile = 56
+    local dirtTile = 52
+    local stoneTile = 51
+
+    for i = 1, 128 do
+        for j = 1, 10 do
+            if (mget(i, j) == stoneTile) then
+                mset(i, j, grassTile)
+                mset(i, j+1, dirtTile)
+                break
+            end
+        end
+    end
+end
+
+function generate_cave()
+    local livingTile = 51
+    local deadTile = 0
+    random_initialization(0.55, livingTile, deadTile)
+    for i = 1, 5 do
+        next_cave_generation(livingTile, deadTile)
+    end
+end
+
+function generate_mineral(mineralTile, chance)
+    random_initialization(chance, mineralTile, 51)
+    for i = 1, 3 do
+       next_conway_generation(mineralTile, 51, 2, 3, 3)
+    end
+end
+
+function generate_word()
+    clear_tilemap()
+    generate_cave()
+    generate_land()
+    generate_mineral(54, 0.1)
+    generate_mineral(55, 0.1)
+    generate_mineral(34, 0.1)
 end
