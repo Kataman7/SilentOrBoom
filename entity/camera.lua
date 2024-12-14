@@ -3,7 +3,7 @@ Camera = Entity:new()
 function Camera:new()
     local obj = Entity.new(self, 64, 64, 8, 8, 5, 0, 0.85, 0)
     setmetatable(obj, self)
-    obj.lerp_factor = 0.1
+    obj.lerp_factor = 0.5
     self.__index = self
     return obj
 end

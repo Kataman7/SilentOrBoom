@@ -40,13 +40,19 @@ function Entity:update()
         self.vely = 0
     end
 
-    local new_x = self.x + self.velx
     self.velx = self.velx * self.frict
-
-    if not self:check_collision(new_x, self.y) then
-        self.x = new_x
-    else
+    local new_x = self.x + self.velx
+    
+    if (abs(self.velx) < 0.1) then
         self.velx = 0
+    end
+
+    if self.x ~= new_x then
+        if not self:check_collision(new_x, self.y) then
+            self.x = new_x
+        else
+            self.velx = 0
+        end
     end
 end
 

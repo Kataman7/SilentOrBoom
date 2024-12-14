@@ -31,6 +31,7 @@ end
 function Player:update()
     self:control()
     Entity.update(self)
+
     
     if self.vely == 0 then
         self.jump_c = 0
