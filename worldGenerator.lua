@@ -53,8 +53,9 @@ function next_cave_generation(livingTile, deadTile)
     end
 end
 
-function next_conway_generation(livingTile, deadTile, min, max, birth)
+function next_conway_generation(livingTile, deadTile, min, max, birth, expend)
     local tempGrid = {}
+    expend = expend or false
     for i = 1, 128 do
         tempGrid[i] = {}
         for j = 1, 32 do
@@ -63,7 +64,11 @@ function next_conway_generation(livingTile, deadTile, min, max, birth)
             if tile == livingTile then
                 tempGrid[i][j] = (neighbors >= min and neighbors <= max) and livingTile or deadTile
             elseif tile == deadTile then
-                tempGrid[i][j] = (neighbors == birth) and livingTile or deadTile
+                if (expend) then
+                    tempGrid[i][j] = (neighbors >= birth) and livingTile or deadTile
+                else
+                    tempGrid[i][j] = (neighbors == birth) and livingTile or deadTile
+                end
             end
         end
     end
@@ -108,21 +113,23 @@ function generate_mineral(mineralTile, chance)
     end
 end
 
-function generate_word()
-    clear_tilemap()
-    generate_cave()
-    generate_land()
-    generate_mineral(54, 0.1)
-    generate_mineral(55, 0.1)
-    generate_mineral(34, 0.1)
-    vine_generation()
+function generate_dirt(dirtTile, chance, max, min, birth)
+    local stoneTile = 51
+    local maxVal = max or 10
+    local minVal = min or 1
+    local birthVal = birth or 2
+
+    random_initialization(chance, dirtTile, stoneTile)
+    for i = 1, 2 do
+        next_conway_generation(dirtTile, stoneTile, minVal, maxVal, birthVal, true)
+    end
 end
 
 function vine_generation()
     for i = 1, 128 do
         for j = 2, 32 do
             if (mget(i, j) == 0) then
-                if (mget(i, j-1) == 51) then
+                if (fget(mget(i, j-1)) == 1) then
                     if (rnd(1) < 0.2) then
                         local k = j
                         while (mget(i, k) == 0 and k < 32) do
@@ -134,4 +141,17 @@ function vine_generation()
             end
         end
     end
+end
+
+function generate_word()
+    clear_tilemap()
+    generate_cave()
+    generate_land()
+    generate_dirt(52, 0.05)
+    generate_dirt(50, 0.05)
+    generate_dirt(49, 0.05, 2, 5)
+    generate_mineral(54, 0.1)
+    generate_mineral(55, 0.1)
+    generate_mineral(34, 0.1)
+    vine_generation(52)
 end

@@ -9,7 +9,7 @@ function _update60()
     player:update()
     dcam:update()
 
-    if (player.y / 8 > 40) then
+    if (player.y / 8 > 45) then
         player.y = 0
         player.x = 64 * 8
         generate_word()
