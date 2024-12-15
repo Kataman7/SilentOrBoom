@@ -28,6 +28,6 @@ function _draw()
     dcam:draw()
     cls(12)
     player:draw()
-    map()
-    effects:draw()           
+    effects:draw()   
+    map()        
 end

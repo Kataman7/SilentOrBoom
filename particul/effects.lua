@@ -18,10 +18,17 @@ end
 function Effects:draw()
     for particul in all(self.particles) do
         particul:draw()
-        
-        if particul.x > dcam.x + 64 or particul.x < dcam.x - 64 or particul.y > dcam.y + 64 or particul.y < dcam.y - 64 then
-            del(self.particles, particul)
-        end
+        self:delete_if_deletable(particul)
+    end
+end
+
+function Effects:delete_if_deletable(particul)
+    if (particul.frame <= 0) then
+        particul.radius = particul.radius - 0.1
+    end
+
+    if (particul.frame <= 0 and particul.radius <= 1) or (particul.x > dcam.x + 64 or particul.x < dcam.x - 64 or particul.y > dcam.y + 64 or particul.y < dcam.y - 64) then
+        del(self.particles, particul)
     end
 end
 
@@ -41,12 +48,34 @@ function Effects:clear()
 end
 
 function Effects:walk(x, y)
-    for i = 1, 1 do
-        local angle = rnd(1) * 2 * 3.14159
+    if rnd(1) < 0.2 then
+        local angle = rnd(1) * 0.5 * 3.14159 -- Limiting angle to only go upwards
         local speed = rnd(1) * 0.2
         local radius = rnd(1) * 2
+        local color = rnd({7,6})
+        local particule = Particul:new(x, y, radius, cos(angle) * speed, sin(angle) * speed, color, 1)
+        add(self.particles, particule)
+    end
+end
+
+function Effects:jump(x, y)
+    for i = 1, 10 do
+        local angle = rnd(1) * 2 * 3.14159
+        local speed = rnd(1) * 0.5
+        local radius = rnd(1) * 2
         local color = rnd({7,7,7,6})
-        local particule = Particul:new(x, y, radius, cos(angle) * speed, sin(angle) * speed, color)
+        local particule = Particul:new(x, y, radius, cos(angle) * speed, sin(angle) * speed, color, 2)
+        add(self.particles, particule)
+    end
+end
+
+function Effects:blood(x, y)
+    for i = 1, 50 do
+        local angle = rnd(1) * 1 * 3.14159 + 3.14159 -- Orienting particles to the left
+        local speed = rnd(1) * 1
+        local radius = rnd(1) * 1
+        local color = rnd({8,8,8,2,2,13,14})
+        local particule = Particul:new(x, y, radius, cos(angle) * speed, sin(angle) * speed, color, 5)
         add(self.particles, particule)
     end
 end
