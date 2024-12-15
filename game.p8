@@ -1,6 +1,8 @@
 pico-8 cartridge // http://www.pico-8.com
 version 42
 __lua__
+#include particul/effects.lua
+#include particul/particul.lua
 #include transition.lua
 #include entity/entity.lua
 #include entity/player.lua

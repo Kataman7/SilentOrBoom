@@ -15,12 +15,15 @@ function Player:control()
     if btn(1) then
         self.velx = self.velx + self.speed
         --self.x += self.speed * 5
+        effects:walk(self.x + self.w / 2, self.y + self.h)
     end
     if btn(0) then
         self.velx = self.velx - self.speed
         --self.x -= self.speed * 5
+        effects:walk(self.x + self.w / 2, self.y + self.h)
     end
     if btnp(2) then
+        effects:explosion(self.x, self.y)
         if self.jump_c < self.jump_m then
             self.vely = -self.jump_f
             self.jump_c = self.jump_c + 1
