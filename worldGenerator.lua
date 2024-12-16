@@ -91,6 +91,10 @@ function generate_land()
             if (mget(i, j) == stoneTile) then
                 mset(i, j, grassTile)
                 mset(i, j+1, dirtTile)
+                if (rnd(1) < 0.2) then
+                    grass = {42, 58, 59, 60, 17, 17, 35, 35}
+                    mset(i, j-1, rnd(grass))
+                end
                 break
             end
         end

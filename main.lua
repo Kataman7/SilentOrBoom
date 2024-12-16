@@ -12,7 +12,8 @@ function _update60()
     effects:update()
 
     if (player.y / 8 > 45) then
-        player.y = 0
+        player.y = -100
+        player.vely = 0
         player.x = 64 * 8
         generate_word()
     end
