@@ -11,6 +11,7 @@ __lua__
 #include entity/zombie.lua
 #include entity/spyder.lua
 #include entity/bat.lua
+#include entity/boss.lua
 #include upgrade.lua
 #include worldGenerator.lua
 #include platform.lua
