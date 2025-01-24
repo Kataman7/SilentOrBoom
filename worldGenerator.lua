@@ -179,50 +179,86 @@ function generate_monstres()
     end
 end
 
+function generate_boss()
+    monstres = {}  -- Initialise la table des monstres
+
+    -- Définir les positions des boss (à l'intérieur du bunker)
+    local boss1_x, boss1_y = 53, 5  -- Position du premier boss
+    local boss2_x, boss2_y = 56, 5  -- Position du second boss (séparé de 3 blocs)
+
+    -- Créer les boss et les ajouter à la table des monstres
+    local boss1 = Boss:new(boss1_x, boss1_y)
+    add(monstres, boss1)  -- Ajouter boss1 à la table
+
+    local boss2 = Boss:new(boss2_x, boss2_y)
+    add(monstres, boss2)  -- Ajouter boss2 à la table
+
+    -- Déplacer les boss (si nécessaire)
+    deplacer_monstre(boss1, 0)
+    deplacer_monstre(boss2, 0)
+end
+
+
 function create_bunker()
-    local size = 10  -- Taille du bunker
+    local width = 20  -- Largeur du bunker
+    local height = 15  -- Hauteur du bunker
     local start_x = 50  -- Position X de départ
     local start_y = 10  -- Position Y de départ
 
-    -- Vérifie que les coordonnées sont valides
-    if start_y + size > 32 then
-        start_y = 32 - size  -- Ajuste la position Y pour rester dans les limites
+    -- Ajuste la position Y si nécessaire
+    if start_y + height > 32 then
+        start_y = 32 - height
     end
 
-    -- Génère le bunker avec un mur de triple épaisseur
-    for layer = 1, 3 do  -- 3 couches de mur
-        local tile = 18 + (layer - 1)  -- Tile différent pour chaque couche (19, 20, 21)
-        local offset = layer - 1  -- Décalage pour chaque couche
+    -- Génère le bunker avec trois couches de murs
+    for layer = 1, 3 do
+        local offset = layer - 1
+        local tile
 
-        -- Mur supérieur
-        for i = start_x - offset, start_x + size + offset do
-            mset(i, start_y - offset, tile)
+        -- Détermine le type de tile selon la couche
+        if layer == 1 then
+            tile = 18  -- Couche extérieure
+        elseif layer == 3 then
+            tile = 20  -- Couche intérieure
+        else
+            tile = 20  -- Couche intermédiaire
         end
 
-        -- Mur inférieur
-        for i = start_x - offset, start_x + size + offset do
-            mset(i, start_y + size + offset, tile)
+        -- Mur supérieur (toit) en bloc 19 pour toutes les couches
+        for i = start_x - offset, start_x + width + offset do
+            mset(i, start_y - offset, 19)  -- Toit en bloc 19
         end
 
-        -- Mur gauche
-        for j = start_y - offset, start_y + size + offset do
-            mset(start_x - offset, j, tile)
+        -- Mur inférieur en blocs 18 ou 20
+        for i = start_x - offset, start_x + width + offset do
+            mset(i, start_y + height + offset, tile)
         end
 
-        -- Mur droit
-        for j = start_y - offset, start_y + size + offset do
-            mset(start_x + size + offset, j, tile)
+        -- Murs gauche et droit avec motif alterné de 18 et 20
+        for j = start_y - offset, start_y + height + offset do
+            -- Mur gauche
+            if (j + layer) % 2 == 0 then
+                mset(start_x - offset, j, 18)
+            else
+                mset(start_x - offset, j, 20)
+            end
+
+            -- Mur droit
+            if (j + layer) % 2 == 0 then
+                mset(start_x + width + offset, j, 18)
+            else
+                mset(start_x + width + offset, j, 20)
+            end
         end
     end
 
-    -- Remplit l'intérieur du bunker avec du vide (tile 0)
-    for i = start_x + 1, start_x + size - 1 do
-        for j = start_y + 1, start_y + size - 1 do
+    -- Remplir l'intérieur avec du vide
+    for i = start_x + 1, start_x + width - 1 do
+        for j = start_y + 1, start_y + height - 1 do
             mset(i, j, 0)
         end
     end
 end
-
 
 function generate_word()
     clear_tilemap()
@@ -235,11 +271,13 @@ function generate_word()
     generate_mineral(55, 0.1)
     generate_mineral(34, 0.1)
     vine_generation(52)
-    generate_monstres()
 
     
 
-    if player.stage==20 then
+    if player.stage>=0 then
         create_bunker()
+        generate_boss()
+    else
+        generate_monstres()
     end
 end

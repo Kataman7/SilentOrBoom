@@ -4,7 +4,6 @@ function _init()
     dcam = Camera:new()
     transition = Transition:new(60, "test...")
     effects = Effects:new()
-    generate_monstres()
     tnts = {}
     upgrade = Upgrade:new()
     upgrade:generate()
