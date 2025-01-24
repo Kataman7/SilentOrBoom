@@ -49,7 +49,8 @@ function Tnt:propulse(other, damage)
             other.vely = other.vely + (dy / dist) * force
 
             if (damage) then
-                other.life -= self.power * (1 - dist / self.range) * 2 
+                other.life -= self.power * (1 - dist / self.range) * 2
+                effects:blood(other.x, other.y)
             end
 
         end

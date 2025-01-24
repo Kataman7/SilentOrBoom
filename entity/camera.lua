@@ -5,6 +5,9 @@ function Camera:new()
     setmetatable(obj, self)
     obj.lerp_factor = 0.5
     obj.target = player
+    obj.levierY = 0
+    self.x = 0
+    self.y = 0
     self.__index = self
     return obj
 end
@@ -14,9 +17,14 @@ function Camera:update()
    --self.y = self.y + (self.target.y - self.y) * self.lerp_factor
 
     self.x = self.target.x
-    self.y = self.target.y
+    self.y = self.target.y + self.levierY
 end
 
 function Camera:draw()
     camera(self.x - 64 + self.target.w / 2, self.y - 64 + self.target.h / 2)
+end
+
+function Camera:resets()
+    --remet la camera a la position par défaut
+    camera()
 end

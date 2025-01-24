@@ -215,7 +215,7 @@ function generate_word()
 
     
 
-    if player.stage 20 then
+    if player.stage >= 20 then
         create_bunker()
     end
 end
