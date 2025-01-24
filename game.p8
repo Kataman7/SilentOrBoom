@@ -5,6 +5,7 @@ __lua__
 #include particul/particul.lua
 #include transition.lua
 #include entity/entity.lua
+#include entity/tnt.lua
 #include entity/player.lua
 #include entity/camera.lua
 #include worldGenerator.lua

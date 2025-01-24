@@ -1,8 +1,10 @@
 function _init()
     player = Player:new()
     dcam = Camera:new()
-    transition = Transition:new(60, "Loading...")
+    transition = Transition:new(60, "test...")
     effects = Effects:new()
+    
+    tnts = {}
 end
 
 function _update60()
@@ -10,6 +12,10 @@ function _update60()
     player:update()
     dcam:update()
     effects:update()
+
+    for tnt in all(tnts) do
+        tnt:update()
+    end
 
     if (player.y / 8 > 45) then
         player.y = -100
@@ -30,5 +36,10 @@ function _draw()
     cls(12)
     player:draw()
     effects:draw()   
+
+    for tnt in all(tnts) do
+        tnt:draw()
+    end
+
     map()        
 end
