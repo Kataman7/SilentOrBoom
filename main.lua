@@ -9,6 +9,7 @@ function _init()
     upgrade = Upgrade:new()
     upgrade:generate()
     gui = GUI:new()
+    music(0, -1, true)
 end
 
 function _update60()
@@ -46,6 +47,11 @@ function _update60()
             del(monstres, monstre)
         end
     end
+
+    if not stat(57) then
+        music(12, -1, true)
+    end
+    
 end
 
 function _draw()
