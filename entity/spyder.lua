@@ -10,6 +10,7 @@ function Spyder:new(x,y)
     obj.anim_speed = 10
     obj.distance_detect = detection
     obj.speed_attack = 60
+
     setmetatable(obj, self)
     self.__index = self
     return obj
