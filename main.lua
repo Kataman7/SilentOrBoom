@@ -1,8 +1,10 @@
 function _init()
     player = Player:new()
+    monstres = {}
     dcam = Camera:new()
     transition = Transition:new(60, "Loading...")
     effects = Effects:new()
+    generate_monstres()
 end
 
 function _update60()
@@ -11,13 +13,27 @@ function _update60()
     dcam:update()
     effects:update()
 
+    if player.life<=0 then
+        transition = Transition:new(60,"Game Over")
+        player.y = -100
+        player.vely = 0
+        player.x = 64 * 8
+        player.life = 20
+        generate_word()
+    end
+
     if (player.y / 8 > 45) then
         player.y = -100
         player.vely = 0
         player.x = 64 * 8
+        player.life = player.life + 5
         generate_word()
     end
     
+    for monstre in all(monstres) do
+        monstre:update()
+    end
+
 end
 
 function _draw()
@@ -29,6 +45,9 @@ function _draw()
     dcam:draw()
     cls(12)
     player:draw()
-    effects:draw()   
-    map()        
+    for monstre in all(monstres) do
+        monstre:draw()
+    end
+    effects:draw()
+    map()
 end
