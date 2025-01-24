@@ -9,6 +9,8 @@ __lua__
 #include entity/player.lua
 #include entity/camera.lua
 #include entity/zombie.lua
+#include entity/spyder.lua
+#include entity/bat.lua
 #include upgrade.lua
 #include worldGenerator.lua
 #include platform.lua

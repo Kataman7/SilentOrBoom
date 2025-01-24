@@ -75,7 +75,7 @@ function Effects:blood(x, y)
         local speed = rnd(1)
         local radius = rnd(1) * 1
         local color = rnd({8,8,8,2,2,13,14})
-        local particule = Particul:new(x, y, radius, cos(angle) * speed, sin(angle) * speed, color, 1)
+        local particule = Particul:new(x, y, radius, cos(angle) * speed, sin(angle) * speed, color, 0.5)
         add(self.particles, particule)
     end
 end
