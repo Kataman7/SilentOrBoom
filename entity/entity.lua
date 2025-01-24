@@ -30,6 +30,17 @@ function Entity:check_collision(x, y)
             or fget(mget(bottom_right.x, bottom_right.y), flag)
 end
 
+function Entity:check_entity_collision(other)
+    return self.x < other.x + other.w and
+           self.x + self.w > other.x and
+           self.y < other.y + other.h and
+           self.y + self.h > other.y
+end
+
+function Entity:get_distance_to(other)
+    return abs(self.x - other.x) + abs(self.y - other.y)
+end
+
 function Entity:update()
     self.vely = self.vely + self.gravity
     local new_y = self.y + self.vely
