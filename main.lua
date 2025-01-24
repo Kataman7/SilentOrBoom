@@ -20,6 +20,8 @@ function _update60()
         player.x = 64 * 8
         player.life = 20
         generate_word()
+    end
+    
     for tnt in all(tnts) do
         tnt:update()
     end
