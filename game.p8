@@ -8,6 +8,7 @@ __lua__
 #include entity/tnt.lua
 #include entity/player.lua
 #include entity/camera.lua
+#include entity/zombie.lua
 #include worldGenerator.lua
 #include platform.lua
 #include main.lua

@@ -7,6 +7,7 @@ function Player:new()
     obj.jump_m = 3
     obj.anim_frame = 0
     obj.anim_speed = 10
+    obj.life = 20
     setmetatable(obj, self)
     self.__index = self
     return obj

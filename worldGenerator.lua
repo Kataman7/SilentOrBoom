@@ -147,6 +147,14 @@ function vine_generation()
     end
 end
 
+function generate_monstres()
+    for i = 1, 20 do
+        local x = flr(rnd(1280))
+        local zombie = Zombie:new(x, 70)
+        add(monstres, zombie)
+    end
+end
+
 function generate_word()
     clear_tilemap()
     generate_cave()
@@ -158,4 +166,5 @@ function generate_word()
     generate_mineral(55, 0.1)
     generate_mineral(34, 0.1)
     vine_generation(52)
+    generate_monstres()
 end
