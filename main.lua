@@ -6,37 +6,55 @@ function _init()
     effects = Effects:new()
     generate_monstres()
     tnts = {}
+    upgrade = Upgrade:new()
+    upgrade:generate()
 end
 
 function _update60()
 
+    if upgrade:needUpgrade() then
+        upgrade:choose()
+        return
+    end
+
     player:update()
     dcam:update()
     effects:update()
-    
-    for tnt in all(tnts) do
+
+    for i = #tnts, 1, -1 do
+        local tnt = tnts[i]
         tnt:update()
+        if tnt.sprite == 0 then
+            del(tnts, tnt)
+        end
     end
 
     if (player.y / 8 > 45) then
         player.y = -100
         player.vely = 0
         player.x = 64 * 8
-        player.life = player.life + 5
         generate_word()
-    end
-    
-    for monstre in all(monstres) do
-        monstre:update()
-        if monstre.life==0 then
-            del(monstres,monstre)
-        end
+        player.stage = player.stage + 1
     end
 
+    for i = #monstres, 1, -1 do
+        local monstre = monstres[i]
+        monstre:update()
+        if monstre.sprite == 0 then
+            del(monstres, monstre)
+        end
+    end
 end
 
 function _draw()
-    if (transition:active()) then
+
+    if upgrade:needUpgrade() then
+        cls(0)
+        upgrade:display()
+        return
+    end
+
+    if transition:active() then
         transition:draw()
         return
     end

@@ -7,19 +7,24 @@ function Player:new()
     obj.jump_m = 3
     obj.anim_frame = 0
     obj.anim_speed = 10
-    obj.life = 20
+    obj.life = 50
+    obj.mineral = 0
+    obj.tntPower = 10
+    obj.tntRange = 100
+    obj.tntSpeed = 100
+    obj.stage = 0
     setmetatable(obj, self)
     self.__index = self
     return obj
 end
 
 function Player:tnt()
-    local tnt = Tnt:new(self.x, self.y, 10, 100, 50)
+    local tnt = Tnt:new(self.x, self.y - 10, self.tntPower, self.tntRange, self.tntSpeed)
     add(tnts, tnt)
 end
 
 function Player:control()
-    
+
     if btn(1) then
         self.velx = self.velx + self.speed
     end
