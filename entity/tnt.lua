@@ -44,11 +44,13 @@ function Tnt:propulse(other, damage)
                 dist = 1  -- Évite la division par zéro
             end
 
-            local force = self.power * (1 - dist / self.range)
-            other.velx = other.velx + (dx / dist) * force
-            other.vely = other.vely + (dy / dist) * force
+            if not other.explosion_resistance then
+                local force = self.power * (1 - dist / self.range)
+                other.velx = other.velx + (dx / dist) * force
+                other.vely = other.vely + (dy / dist) * force
+            end
 
-            if (damage) then
+            if damage then
                 other.life -= self.power * (1 - dist / self.range) * 2
                 effects:blood(other.x, other.y)
             end
