@@ -147,11 +147,35 @@ function vine_generation()
     end
 end
 
+function deplacer_monstre(monstre,sens)
+    while monstre:check_collision(monstre.x,monstre.y) do
+        if sens==1 then
+            monstre.y=monstre.y+5
+        else
+            monstre.y=monstre.y-5
+        end
+    end
+end
+
 function generate_monstres()
+    monstres = {}
     for i = 1, 20 do
         local x = flr(rnd(1280))
-        local zombie = Zombie:new(x, 70)
+        local zombie = Zombie:new(x, 90)
         add(monstres, zombie)
+        deplacer_monstre(zombie,0)
+    end
+    for i = 1, 20 do
+        local x = flr(rnd(1280))
+        local spyder = Spyder:new(x, 90)
+        add(monstres, spyder)
+        deplacer_monstre(spyder,1)
+    end
+    for i = 1, 20 do
+        local x = flr(rnd(1280))
+        local bat = Bat:new(x, 90)
+        add(monstres, bat)
+        deplacer_monstre(bat,0)
     end
 end
 
