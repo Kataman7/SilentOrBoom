@@ -7,13 +7,24 @@ function Player:new()
     obj.jump_m = 3
     obj.anim_frame = 0
     obj.anim_speed = 10
+    obj.life = 50
+    obj.mineral = 0
+    obj.tntPower = 10
+    obj.tntRange = 100
+    obj.tntSpeed = 100
+    obj.stage = 0
     setmetatable(obj, self)
     self.__index = self
     return obj
 end
 
+function Player:tnt()
+    local tnt = Tnt:new(self.x, self.y - 10, self.tntPower, self.tntRange, self.tntSpeed)
+    add(tnts, tnt)
+end
+
 function Player:control()
-    
+
     if btn(1) then
         self.velx = self.velx + self.speed
     end
@@ -28,7 +39,7 @@ function Player:control()
         end
     end
     if (btnp(5)) then
-        effects:explosion(self.x + self.w / 2, self.y + self.h)
+        player:tnt()
     end
     if (btnp(4)) then
         effects:blood(self.x + self.w / 2, self.y + self.h)

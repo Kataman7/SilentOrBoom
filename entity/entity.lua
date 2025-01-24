@@ -68,5 +68,7 @@ function Entity:update()
 end
 
 function Entity:draw()
-    spr(self.sprite, self.x, self.y)
+    if self.sprite ~= 0 then
+        spr(self.sprite, self.x, self.y)
+    end
 end
