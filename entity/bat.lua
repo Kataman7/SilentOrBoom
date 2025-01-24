@@ -8,6 +8,7 @@ function Bat:new(x,y)
     obj.anim_speed = 10
     obj.distance_detect = detection
     obj.speed_attack = 60
+    obj.life=15
     setmetatable(obj, self)
     self.__index = self
     return obj
@@ -102,5 +103,10 @@ function Bat:update()
     end
     if (abs(self.vely) < 0.1) then
         self.vely = 0
+    end
+
+    --Mort!
+    if (self.life<=0) then
+        self.sprite = 0
     end
 end
