@@ -10,7 +10,8 @@ function Spyder:new(x,y)
     obj.anim_speed = 10
     obj.distance_detect = detection
     obj.speed_attack = 60
-    obj.life=15
+    obj.life=15 + player.stage
+    obj.attack = 1 + flr(player.stage / 10)
     setmetatable(obj, self)
     self.__index = self
     return obj
@@ -114,7 +115,7 @@ function Spyder:update()
         if self.speed_attack<=0 then
             effects:blood(self.x,self.y)
             self.speed_attack=60
-            player.life=player.life-1
+            player.life=player.life-self.attack
         end
     end
 

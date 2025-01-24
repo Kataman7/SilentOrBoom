@@ -1,17 +1,19 @@
 Upgrade = {}
 local possibleUPgrade = {
-    { value = "jump_f", description = "increases jump strength", baseValue = 5 },
+    { value = "jump_f", description = "increases jump strength", baseValue = 10 },
     { value = "jump_m", description = "adds an extra jump", baseValue = 1 },
-    { value = "speed", description = "speed boost", baseValue = 0.2 },
-    { value = "life", description = "increases health", baseValue = 20 },
-    { value = "tntPower", description = "increases tnt power", baseValue = 10 },
+    { value = "speed", description = "speed boost", baseValue = 0.3 },
+    { value = "life", description = "increases health", baseValue = 25 },
+    { value = "life", description = "increases health", baseValue = 25 },
+    { value = "life", description = "increases health", baseValue = 25 },
+    { value = "tntPower", description = "increases tnt power", baseValue = 15 },
     { value = "tntRange", description = "increases TNT range", baseValue = 100 },
-    { value = "tntSpeed", description = "increases TNT speed", baseValue = -2 },
+    { value = "tntSpeed", description = "increases TNT speed", baseValue = -15 },
 }
 
 function Upgrade:new()
     local obj = {
-        mineral = 10,
+        mineral = 4,
         upgradeA = nil,
         quantityA = 0,
         upgradeB = nil,

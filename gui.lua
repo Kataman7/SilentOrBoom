@@ -54,3 +54,9 @@ function GUI:draw()
     print(self.tntDelay.valeur, self.tntDelay.x + 10 + offset_x, self.tntDelay.y + offset_y + 2, 7)
 
 end
+
+function GUI:displayGameOver()
+    
+    dcam:resets()
+    print("GAME OVER", 50, 64, 7)
+end

@@ -81,10 +81,7 @@ function next_conway_generation(livingTile, deadTile, min, max, birth, expend)
     end
 end
 
-function generate_land()
-    local grassTile = 56
-    local dirtTile = 52
-    local stoneTile = 51
+function generate_land(grassTile, dirtTile, stoneTile)
 
     for i = 1, 128 do
         for j = 1, 10 do
@@ -101,9 +98,7 @@ function generate_land()
     end
 end
 
-function generate_cave()
-    local livingTile = 51
-    local deadTile = 0
+function generate_cave(livingTile, deadTile)
     random_initialization(0.53, livingTile, deadTile)
     for i = 1, 5 do
         next_cave_generation(livingTile, deadTile)
@@ -159,23 +154,30 @@ end
 
 function generate_monstres()
     monstres = {}
-    for i = 1, 20 do
-        local x = flr(rnd(1280))
+
+    for i = 1, player.stage * 2 + 4 do
+        local x = flr(rnd(128 * 8))
         local zombie = Zombie:new(x, 90)
         add(monstres, zombie)
         deplacer_monstre(zombie,0)
     end
-    for i = 1, 20 do
-        local x = flr(rnd(1280))
-        local spyder = Spyder:new(x, 90)
-        add(monstres, spyder)
-        deplacer_monstre(spyder,1)
+
+    if (player.stage >= 2) then
+        for i = 1, player.stage * 2 do
+            local x = flr(rnd(128 * 8))
+            local bat = Bat:new(x, 90)
+            add(monstres, bat)
+            deplacer_monstre(bat,0)
+        end
     end
-    for i = 1, 20 do
-        local x = flr(rnd(1280))
-        local bat = Bat:new(x, 90)
-        add(monstres, bat)
-        deplacer_monstre(bat,0)
+
+    if (player.stage > 4) then
+        for i = 1, player.stage do
+            local x = flr(rnd(128 * 8))
+            local spider = Spyder:new(x, 90)
+            add(monstres, spider)
+            deplacer_monstre(spider,0)
+        end
     end
 end
 
@@ -260,10 +262,10 @@ function create_bunker()
     end
 end
 
-function generate_word()
+function generate_biomeA()
     clear_tilemap()
-    generate_cave()
-    generate_land()
+    generate_cave(51, 0)
+    generate_land(56, 52, 51)
     generate_dirt(52, 0.05)
     generate_dirt(50, 0.05)
     generate_dirt(49, 0.05, 2, 5)
@@ -271,9 +273,27 @@ function generate_word()
     generate_mineral(55, 0.1)
     generate_mineral(34, 0.1)
     vine_generation(52)
+end
+
+function generate_biomeB()
+    clear_tilemap()
+    generate_cave(51, 0)
+    generate_land(56, 52, 51)
+    generate_dirt(52, 0.01)
+    generate_dirt(50, 0.05)
+    generate_dirt(49, 0.01, 2, 5)
+    generate_mineral(54, 0.1)
+    generate_mineral(55, 0.1)
+    generate_mineral(34, 0.1)
+    generate_mineral(57, 0.1)
+    vine_generation(52)
+end
+
+function generate_word()
+    generate_biomeB()
 
     
-    if player.stage>=0 then
+    if player.stage>=15 then
         create_bunker()
         generate_boss()
     else

@@ -18,6 +18,10 @@ function _update60()
         return
     end
 
+    if player.life <= 0 then
+        return
+    end
+
     player:update()
     dcam:update()
     effects:update()
@@ -54,6 +58,12 @@ function _update60()
 end
 
 function _draw()
+
+    if player.life <= 0 then
+        cls(0)
+        gui:displayGameOver()
+        return
+    end
 
     if upgrade:needUpgrade() then
         Camera:resets()

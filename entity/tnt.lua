@@ -70,16 +70,17 @@ function Tnt:destroyMap()
                 local mx = center_mx + dx
                 local my = center_my + dy
                 
-                -- Vérification des limites de la map
                 if mx >= 0 and mx < 128 and my >= 0 and my < 64 then
                     
                     mineral = mget(mx, my)
 
-                    if (mineral == 34 or mineral == 55 or mineral == 57 or mineral == 41 or mineral == 54) then
+                    if fget(mget(mx, my), 2) then
                         player.mineral += 1;
                     end
 
-                    mset(mx, my, 0)
+                    if not fget(mget(mx, my), 1) then 
+                        mset(mx, my, 0)
+                    end
                 end
             end
         end
