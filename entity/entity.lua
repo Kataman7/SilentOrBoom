@@ -11,7 +11,8 @@ function Entity:new(x, y, w, h, speed, gravity, frict, sprite)
         speed = speed or 1,
         gravity = gravity or 0.2,
         frict = frict or 0.9,
-        sprite = sprite
+        sprite = sprite,
+        explosion_resistance=false
     }
     setmetatable(obj, self)
     self.__index = self

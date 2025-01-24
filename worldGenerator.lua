@@ -180,28 +180,17 @@ function generate_monstres()
 end
 
 function generate_boss()
-    monstres = {}  -- Initialise la table des monstres
-
-    -- Définir les positions des boss (à l'intérieur du bunker)
-    local boss1_x, boss1_y = 53, 5  -- Position du premier boss
-    local boss2_x, boss2_y = 56, 5  -- Position du second boss (séparé de 3 blocs)
-
-    -- Créer les boss et les ajouter à la table des monstres
-    local boss1 = Boss:new(boss1_x, boss1_y)
-    add(monstres, boss1)  -- Ajouter boss1 à la table
-
-    local boss2 = Boss:new(boss2_x, boss2_y)
-    add(monstres, boss2)  -- Ajouter boss2 à la table
-
-    -- Déplacer les boss (si nécessaire)
-    deplacer_monstre(boss1, 0)
-    deplacer_monstre(boss2, 0)
+    monstres = {}
+    local boss1 = Boss:new(430, 122,0)
+    add(monstres, boss1)
+    local boss2 = Boss:new(452, 122,boss1)
+    add(monstres, boss2)  
 end
 
 
 function create_bunker()
     local width = 20  -- Largeur du bunker
-    local height = 15  -- Hauteur du bunker
+    local height = 10  -- Hauteur du bunker
     local start_x = 50  -- Position X de départ
     local start_y = 10  -- Position Y de départ
 
@@ -273,6 +262,7 @@ function generate_word()
     vine_generation(52)
 
     
+
     if player.stage>=0 then
         create_bunker()
         generate_boss()
