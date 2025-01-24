@@ -18,7 +18,11 @@ function Tnt:update()
     if self.tick <= 1 then
         if self.power > 0 then
             self:propulse(player)
+            for monstre in all(monstres) do
+                self:propulse(monstre, true)
+            end
             self:destroyMap()
+            effects:explosion(self.x + self.w / 2, self.y + self.h / 2)
         end
 
         self.power = 0
@@ -26,10 +30,7 @@ function Tnt:update()
     end
 end
 
-function Tnt:propulse(other)
-    if self.power > 0 then
-        effects:explosion(self.x + self.w / 2, self.y + self.h / 2)
-            
+function Tnt:propulse(other, damage)
         local dx = other.x - self.x
         local dy = other.y - self.y
         local dist = sqrt(dx * dx + dy * dy)
@@ -46,8 +47,12 @@ function Tnt:propulse(other)
             local force = self.power * (1 - dist / self.range)
             other.velx = other.velx + (dx / dist) * force
             other.vely = other.vely + (dy / dist) * force
+
+            if (damage) then
+                other.life -= self.power * (1 - dist / self.range) * 2 
+            end
+
         end
-    end
 end
 
 function Tnt:destroyMap()
@@ -69,8 +74,8 @@ function Tnt:destroyMap()
                     
                     mineral = mget(mx, my)
 
-                    if (mineral == 34 or mineral == 55 or mineral == 57 or mineral == 41) then
-                        
+                    if (mineral == 34 or mineral == 55 or mineral == 57 or mineral == 41 or mineral == 54) then
+                        player.mineral += 1;
                     end
 
                     mset(mx, my, 0)

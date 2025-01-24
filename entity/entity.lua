@@ -62,11 +62,7 @@ function Entity:update()
         if not self:check_collision(new_x, self.y) then
             self.x = new_x
         else
-            if self.velx > 50 then
-                self.velx = self.velx * -0.5
-            else
-                self.velx = 0
-            end
+            self.velx = 0
         end
     end
 end

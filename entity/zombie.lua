@@ -10,6 +10,7 @@ function Zombie:new(x,y)
     obj.anim_speed = 10
     obj.distance_detect = detection
     obj.speed_attack = 60
+    obj.life = 25
     setmetatable(obj, self)
     self.__index = self
     return obj
@@ -89,5 +90,9 @@ function Zombie:update()
     end
     if self.vely == 0 then
         self.jump_c = 0
+    end
+
+    if (self.life<=0) then
+        self.sprite = 0
     end
 end

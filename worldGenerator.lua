@@ -155,6 +155,51 @@ function generate_monstres()
     end
 end
 
+function create_bunker()
+    local size = 10  -- Taille du bunker
+    local start_x = 50  -- Position X de départ
+    local start_y = 10  -- Position Y de départ
+
+    -- Vérifie que les coordonnées sont valides
+    if start_y + size > 32 then
+        start_y = 32 - size  -- Ajuste la position Y pour rester dans les limites
+    end
+
+    -- Génère le bunker avec un mur de triple épaisseur
+    for layer = 1, 3 do  -- 3 couches de mur
+        local tile = 18 + (layer - 1)  -- Tile différent pour chaque couche (19, 20, 21)
+        local offset = layer - 1  -- Décalage pour chaque couche
+
+        -- Mur supérieur
+        for i = start_x - offset, start_x + size + offset do
+            mset(i, start_y - offset, tile)
+        end
+
+        -- Mur inférieur
+        for i = start_x - offset, start_x + size + offset do
+            mset(i, start_y + size + offset, tile)
+        end
+
+        -- Mur gauche
+        for j = start_y - offset, start_y + size + offset do
+            mset(start_x - offset, j, tile)
+        end
+
+        -- Mur droit
+        for j = start_y - offset, start_y + size + offset do
+            mset(start_x + size + offset, j, tile)
+        end
+    end
+
+    -- Remplit l'intérieur du bunker avec du vide (tile 0)
+    for i = start_x + 1, start_x + size - 1 do
+        for j = start_y + 1, start_y + size - 1 do
+            mset(i, j, 0)
+        end
+    end
+end
+
+
 function generate_word()
     clear_tilemap()
     generate_cave()
@@ -167,4 +212,10 @@ function generate_word()
     generate_mineral(34, 0.1)
     vine_generation(52)
     generate_monstres()
+
+    
+
+    if player.stage 20 then
+        create_bunker()
+    end
 end
