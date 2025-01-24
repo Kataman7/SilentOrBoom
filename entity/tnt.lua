@@ -18,6 +18,7 @@ function Tnt:update()
     if self.tick <= 1 then
         if self.power > 0 then
             self:propulse(player)
+            self:destroyMap()
         end
 
         self.power = 0
@@ -45,6 +46,36 @@ function Tnt:propulse(other)
             local force = self.power * (1 - dist / self.range)
             other.velx = other.velx + (dx / dist) * force
             other.vely = other.vely + (dy / dist) * force
+        end
+    end
+end
+
+function Tnt:destroyMap()
+
+    -- Destruction de la map
+    local center_mx = flr((self.x + 4) / 8) -- Position centre en tiles
+    local center_my = flr((self.y + 4) / 8)
+    local radius = flr(self.range / 30) * 1.2 -- Rayon en tiles
+
+    for dx = -radius, radius do
+        for dy = -radius, radius do
+            -- Vérification cercle avec Pythagore
+            if dx*dx + dy*dy <= radius*radius then
+                local mx = center_mx + dx
+                local my = center_my + dy
+                
+                -- Vérification des limites de la map
+                if mx >= 0 and mx < 128 and my >= 0 and my < 64 then
+                    
+                    mineral = mget(mx, my)
+
+                    if (mineral == 34 or mineral == 55 or mineral == 57 or mineral == 41) then
+                        
+                    end
+
+                    mset(mx, my, 0)
+                end
+            end
         end
     end
 end
