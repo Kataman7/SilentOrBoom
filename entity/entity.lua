@@ -62,11 +62,17 @@ function Entity:update()
         if not self:check_collision(new_x, self.y) then
             self.x = new_x
         else
-            self.velx = 0
+            if self.velx > 50 then
+                self.velx = self.velx * -0.5
+            else
+                self.velx = 0
+            end
         end
     end
 end
 
 function Entity:draw()
-    spr(self.sprite, self.x, self.y)
+    if self.sprite ~= 0 then
+        spr(self.sprite, self.x, self.y)
+    end
 end

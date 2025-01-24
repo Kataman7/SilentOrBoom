@@ -13,6 +13,11 @@ function Player:new()
     return obj
 end
 
+function Player:tnt()
+    local tnt = Tnt:new(self.x, self.y, 10, 100, 50)
+    add(tnts, tnt)
+end
+
 function Player:control()
     
     if btn(1) then
@@ -29,7 +34,7 @@ function Player:control()
         end
     end
     if (btnp(5)) then
-        effects:explosion(self.x + self.w / 2, self.y + self.h)
+        player:tnt()
     end
     if (btnp(4)) then
         effects:blood(self.x + self.w / 2, self.y + self.h)
