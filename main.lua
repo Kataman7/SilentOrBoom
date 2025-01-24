@@ -7,6 +7,7 @@ function _init()
     tnts = {}
     upgrade = Upgrade:new()
     upgrade:generate()
+    gui = GUI:new()
 end
 
 function _update60()
@@ -19,6 +20,7 @@ function _update60()
     player:update()
     dcam:update()
     effects:update()
+    gui:update()
 
     for i = #tnts, 1, -1 do
         local tnt = tnts[i]
@@ -48,7 +50,9 @@ end
 function _draw()
 
     if upgrade:needUpgrade() then
+        Camera:resets()
         cls(0)
+        print("test", 64, 64, 7)
         upgrade:display()
         return
     end
@@ -64,10 +68,12 @@ function _draw()
     for monstre in all(monstres) do
         monstre:draw()
     end
-    effects:draw()
     map()
+    effects:draw()
 
     for tnt in all(tnts) do
         tnt:draw()
     end
+
+    gui:draw()
 end

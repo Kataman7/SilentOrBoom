@@ -2,12 +2,11 @@ Upgrade = {}
 local possibleUPgrade = {
     { value = "jump_f", description = "increases jump strength", baseValue = 5 },
     { value = "jump_m", description = "adds an extra jump", baseValue = 1 },
-    { value = "jump_c", description = "resets jump counter", baseValue = 0 },
     { value = "speed", description = "speed boost", baseValue = 0.2 },
     { value = "life", description = "increases health", baseValue = 20 },
     { value = "tntPower", description = "increases tnt power", baseValue = 10 },
     { value = "tntRange", description = "increases TNT range", baseValue = 100 },
-    { value = "tntSpeed", description = "increases TNT speed", baseValue = 100 }
+    { value = "tntSpeed", description = "increases TNT speed", baseValue = -2 },
 }
 
 function Upgrade:new()
@@ -44,15 +43,15 @@ end
 
 function Upgrade:choose()
     if btnp(4) then
-        self:upgradePlayer(self.upgradeA, self.quantityA)
+        self:upgradePlayer(self.upgradeA, 0)
     elseif btnp(5) then
-        self:upgradePlayer(self.upgradeB, self.quantityB)
+        self:upgradePlayer(self.upgradeB, 0)
     end
 end
 
 function Upgrade:upgradePlayer(upgrade, quantity)
     player.mineral = player.mineral - self.mineral
     player[upgrade.value] = player[upgrade.value] + upgrade.baseValue * quantity
-    self.mineral = self.mineral * 1.5
+    self.mineral = flr(self.mineral * 1.5)
     self:generate()
 end

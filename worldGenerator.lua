@@ -273,7 +273,6 @@ function generate_word()
     vine_generation(52)
 
     
-
     if player.stage>=0 then
         create_bunker()
         generate_boss()

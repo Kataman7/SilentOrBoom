@@ -13,17 +13,31 @@ function Player:new()
     obj.tntRange = 100
     obj.tntSpeed = 100
     obj.stage = 0
+    obj.tntDelayMax = 60 * 5
+    obj.tntDelay = 0
     setmetatable(obj, self)
     self.__index = self
     return obj
 end
 
 function Player:tnt()
-    local tnt = Tnt:new(self.x, self.y - 10, self.tntPower, self.tntRange, self.tntSpeed)
+
+    if self.tntDelay > 0 then
+        return
+    end
+
+    local tnt = Tnt:new(self.x, self.y, self.tntPower, self.tntRange, self.tntSpeed)
+    tnt.vely = -3;
     add(tnts, tnt)
+    self.tntDelay = self.tntDelayMax
 end
 
 function Player:control()
+
+    self.tntDelay = self.tntDelay - 1
+    if self.tntDelay < 0 then
+        self.tntDelay = 0
+    end
 
     if btn(1) then
         self.velx = self.velx + self.speed
@@ -31,18 +45,15 @@ function Player:control()
     if btn(0) then
         self.velx = self.velx - self.speed
     end
-    if btnp(2) then
+    if btnp(2) or btnp(4) then
         effects:jump(self.x + self.w / 2, self.y + self.h)
         if self.jump_c < self.jump_m then
             self.vely = -self.jump_f
             self.jump_c = self.jump_c + 1
         end
     end
-    if (btnp(5)) then
+    if btnp(5) then
         player:tnt()
-    end
-    if (btnp(4)) then
-        effects:blood(self.x + self.w / 2, self.y + self.h)
     end
 end
 
