@@ -1,22 +1,21 @@
-Zombie = Entity:new()
+Spyder = Entity:new()
 
-function Zombie:new(x,y)
+function Spyder:new(x,y)
     local speed = rnd(0.005)+0.13
     local detection = rnd(10)+100
-    local obj = Entity.new(self, x, y, 8, 8, speed, 0.2, 0.85, 10)
-    obj.jump_f = 2
+    local obj = Entity.new(self, x, y, 8, 8, speed, 0.2, 0.85, 13)
+    obj.jump_f = 3
     obj.jump_c = 0
     obj.anim_frame = 0
     obj.anim_speed = 10
     obj.distance_detect = detection
     obj.speed_attack = 60
-    obj.life = 1
     setmetatable(obj, self)
     self.__index = self
     return obj
 end
 
-function Zombie:control()
+function Spyder:control()
     if self:get_distance_to(player)<self.distance_detect then
         if self.x<player.x-1 then
             self.velx = self.velx + self.speed
@@ -24,7 +23,7 @@ function Zombie:control()
             self.velx = self.velx - self.speed
         else
             if self.jump_c < 1 then
-                self.vely = -self.jump_f
+                self.vely = self.jump_f
                 self.jump_c = self.jump_c + 1
             end
         end
@@ -32,11 +31,11 @@ function Zombie:control()
 end
 
 
-function Zombie:update()
+function Spyder:update()
     self:control()
 
     --Copie de entity pour pouvoir sauter au bon moment
-    self.vely = self.vely + self.gravity
+    self.vely = self.vely - self.gravity
     local new_y = self.y + self.vely
 
     if not self:check_collision(self.x, new_y) then
@@ -60,7 +59,7 @@ function Zombie:update()
                 self.velx = self.velx * -0.5
             elseif self:get_distance_to(player)<self.distance_detect then
                 if self.jump_c < 1 then
-                    self.vely = -self.jump_f
+                    self.vely = self.jump_f
                     self.jump_c = self.jump_c + 1
                 end
             else
@@ -96,16 +95,16 @@ function Zombie:update()
         self.anim_frame += 1
         if self.anim_frame >= self.anim_speed then
             self.anim_frame = 0
-            if self.sprite == 11 then
-                self.sprite = 12
+            if self.sprite == 14 then
+                self.sprite = 15
             else
-                self.sprite = 11
+                self.sprite = 14
             end
         end    
         effects:walk(self.x + self.w / 2, self.y + self.h)
     else
         if self.vely==0 and self.velx==0 then
-            self.sprite = 10
+            self.sprite = 13
         end
     end
 

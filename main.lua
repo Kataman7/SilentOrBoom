@@ -13,14 +13,6 @@ function _update60()
     player:update()
     dcam:update()
     effects:update()
-    if player.life<=0 then
-        transition = Transition:new(60,"Game Over")
-        player.y = -100
-        player.vely = 0
-        player.x = 64 * 8
-        player.life = 20
-        generate_word()
-    end
     
     for tnt in all(tnts) do
         tnt:update()
@@ -36,6 +28,9 @@ function _update60()
     
     for monstre in all(monstres) do
         monstre:update()
+        if monstre.life==0 then
+            del(monstres,monstre)
+        end
     end
 
 end

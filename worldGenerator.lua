@@ -150,8 +150,18 @@ end
 function generate_monstres()
     for i = 1, 20 do
         local x = flr(rnd(1280))
-        local zombie = Zombie:new(x, 70)
+        local zombie = Zombie:new(x, 90)
         add(monstres, zombie)
+    end
+    for i = 1, 20 do
+        local x = flr(rnd(1280))
+        local spyder = Spyder:new(x, 90)
+        add(monstres, spyder)
+    end
+    for i = 1, 20 do
+        local x = flr(rnd(1280))
+        local bat = Bat:new(x, 90)
+        add(monstres, bat)
     end
 end
 
