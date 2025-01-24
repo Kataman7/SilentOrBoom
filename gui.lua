@@ -51,5 +51,5 @@ function GUI:draw()
     spr(self.stage.sprite, self.stage.x + offset_x, self.stage.y + offset_y)
     print(self.stage.valeur, self.stage.x + 10 + offset_x, self.stage.y + offset_y + 2, 7)
     spr(self.tntDelay.sprite, self.tntDelay.x + offset_x, self.tntDelay.y + offset_y)
-    print(self.tntDelay.valeur, self.tntDelay.x + 10 + offset_x, self.tntDelay.y + offset_y + 2, 7)
+    print(player.x .. " " .. player.y, self.tntDelay.x + 10 + offset_x, self.tntDelay.y + offset_y + 2, 7)
 end
