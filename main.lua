@@ -14,10 +14,6 @@ end
 function _update60()
 
     gui:update()
-
-    if player.boss_tuer>=2 then
-        GUI:displayWin()
-    end
     
     
     if upgrade:needUpgrade() then
@@ -32,6 +28,10 @@ function _update60()
     player:update()
 
     if gui.intro < 3 then
+        return
+    end
+
+    if player.boss_tuer>=2 then
         return
     end
 
@@ -81,6 +81,12 @@ function _draw()
     if gui.intro < 3 then
         cls(0)
         gui:displayIntro()
+        return
+    end
+
+    if player.boss_tuer>=2 then
+        cls(0)
+        GUI:displayWin()
         return
     end
 

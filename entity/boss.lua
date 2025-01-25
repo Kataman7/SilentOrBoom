@@ -74,6 +74,7 @@ function Boss:update()
     --Mort!
     if (self.life<=0) then
         self.sprite = 0
+        player.boss_tuer=player.boss_tuer+1
     end
 
     if self.boss~=0 then
@@ -115,7 +116,6 @@ function Boss:update()
                 player.vely = -5
                 player.jump_c = player.jump_c + 1
             end
-            Effects:speaker_waves(self.x + 8, self.y + self.h)
         elseif self.phase_frame > 85 then
             self.phase_frame = 0 -- Réinitialisation du compteur de frame
         else
