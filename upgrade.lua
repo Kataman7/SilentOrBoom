@@ -1,14 +1,14 @@
 Upgrade = {}
 local possibleUPgrade = {
-    { value = "jump_f", description = "increases jump strength", baseValue = 10 },
-    { value = "jump_m", description = "adds an extra jump", baseValue = 1 },
-    { value = "speed", description = "speed boost", baseValue = 0.3 },
-    { value = "life", description = "increases health", baseValue = 25 },
-    { value = "life", description = "increases health", baseValue = 25 },
-    { value = "life", description = "increases health", baseValue = 25 },
-    { value = "tntPower", description = "increases tnt power", baseValue = 15 },
-    { value = "tntRange", description = "increases TNT range", baseValue = 100 },
-    { value = "tntSpeed", description = "increases TNT speed", baseValue = -15 },
+    { value = "jump_f", description = "augmente la force de saut", baseValue = 10 },
+    { value = "jump_m", description = "ajoute un saut supplémentaire", baseValue = 1 },
+    { value = "speed", description = "boost de vitesse", baseValue = 0.3 },
+    { value = "life", description = "augmente la santé", baseValue = 25 },
+    { value = "life", description = "augmente la santé", baseValue = 25 },
+    { value = "life", description = "augmente la santé", baseValue = 25 },
+    { value = "tntPower", description = "augmente la puissance de la TNT", baseValue = 15 },
+    { value = "tntRange", description = "augmente la portée de la TNT", baseValue = 100 },
+    { value = "tntSpeed", description = "augmente la vitesse de la TNT", baseValue = -15 },
 }
 
 function Upgrade:new()
