@@ -12,7 +12,8 @@ function Entity:new(x, y, w, h, speed, gravity, frict, sprite)
         gravity = gravity or 0.2,
         frict = frict or 0.9,
         sprite = sprite,
-        explosion_resistance=false
+        explosion_resistance=false,
+        orientation = true
     }
     setmetatable(obj, self)
     self.__index = self
@@ -70,6 +71,13 @@ end
 
 function Entity:draw()
     if self.sprite ~= 0 then
-        spr(self.sprite, self.x, self.y)
+
+        if self.velx > 0 then
+            self.orientation = false
+        elseif self.velx < 0 then
+            self.orientation = true
+        end
+
+        spr(self.sprite, self.x, self.y, 1, 1, self.orientation)
     end
 end
