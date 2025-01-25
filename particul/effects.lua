@@ -29,9 +29,10 @@ function Effects:draw()
         self:delete_if_deletable(particul)
     end
 
-    -- Dessiner les ondes
-    for wave in all(self.waves) do
-        wave:draw()
+    -- Mettre à jour les ondes
+    for i = #self.waves, 1, -1 do
+        local wave = self.waves[i]
+        wave:update()
         self:delete_if_deletable(wave)
     end
 end
