@@ -52,6 +52,7 @@ function Boss:update()
     -- Mort
     if self.life==0 then
         self.sprite=0
+        player.boss_tuer=player.boss_tuer+1
         return
     end
 

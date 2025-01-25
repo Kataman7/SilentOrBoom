@@ -38,8 +38,8 @@ end
 function Upgrade:display()
     local base = 20
     print("choose an upgrade", 0, base, 7)
-    print("a : " .. self.upgradeA.description, 0, base + 8, 7)
-    print("b : " .. self.upgradeB.description, 0, base + 16, 7)
+    print("w : " .. self.upgradeA.description, 0, base + 8, 7)
+    print("x : " .. self.upgradeB.description, 0, base + 16, 7)
 end
 
 function Upgrade:choose()

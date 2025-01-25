@@ -17,6 +17,7 @@ function Player:new()
     obj.tntDelay = obj.tntDelayMax
     obj.mineral_mult = 1
     obj.bonus_stage = 0
+    obj.boss_tuer = 0
     setmetatable(obj, self)
     self.__index = self
     return obj
