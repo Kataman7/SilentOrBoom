@@ -4,7 +4,7 @@ function Tir:new(x, y)
     local obj = Entity.new(self, x, y, 4, 4, 0, 0, 0, 31)  -- 31 est le sprite du tir
     obj.speed = 0.5  -- Vitesse du tir
     obj:direction()
-    obj.life=1
+    obj.life=1000
     setmetatable(obj, self)
     self.__index = self
     return obj
