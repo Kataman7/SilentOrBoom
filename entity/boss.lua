@@ -10,7 +10,7 @@ function Boss:new(x,y,boss)
     obj.anim_speed = 10
     obj.distance_detect = detection
     obj.speed_attack = 60
-    obj.life = 100
+    obj.life = 1500
     obj.boss=boss
     obj.phase=0
     obj.phase_frame=0
