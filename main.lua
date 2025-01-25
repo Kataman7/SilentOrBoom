@@ -3,7 +3,6 @@ function _init()
     monstres = {}
     tirs = {}
     dcam = Camera:new()
-    transition = Transition:new(60, "La vie était douce. Rien ne pouvait perturber ma paix intérieure. Sauf peut-être... une musique à fond venant de chez les voisins.")
     effects = Effects:new()
     tnts = {}
     upgrade = Upgrade:new()
@@ -13,6 +12,8 @@ function _init()
 end
 
 function _update60()
+
+    gui:update()
 
     if upgrade:needUpgrade() then
         upgrade:choose()
@@ -24,9 +25,13 @@ function _update60()
     end
 
     player:update()
+
+    if gui.intro < 3 then
+        return
+    end
+
     dcam:update()
     effects:update()
-    gui:update()
 
     for i = #tnts, 1, -1 do
         local tnt = tnts[i]
@@ -68,6 +73,12 @@ end
 
 function _draw()
 
+    if gui.intro < 3 then
+        cls(0)
+        gui:displayIntro()
+        return
+    end
+
     if player.life <= 0 then
         cls(0)
         gui:displayGameOver()
@@ -79,11 +90,6 @@ function _draw()
         cls(0)
         print("test", 64, 64, 7)
         upgrade:display()
-        return
-    end
-
-    if transition:active() then
-        transition:draw()
         return
     end
 

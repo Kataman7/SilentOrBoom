@@ -316,7 +316,6 @@ function generate_biomeC()
 end
 
 function generate_word()
-    generate_biomeA()
 
     if (player.stage < 10) then
         if rnd(1) < 0.2 then

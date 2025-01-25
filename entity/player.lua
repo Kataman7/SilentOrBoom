@@ -27,7 +27,7 @@ function Player:tnt()
     end
 
     local tnt = Tnt:new(self.x, self.y, self.tntPower, self.tntRange, self.tntSpeed)
-    tnt.vely = -3;
+    tnt.vely = -5;
     add(tnts, tnt)
     self.tntDelay = self.tntDelayMax
 end
