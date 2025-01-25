@@ -15,9 +15,7 @@ function Upgrade:new()
     local obj = {
         mineral = 4,
         upgradeA = nil,
-        quantityA = 0,
         upgradeB = nil,
-        quantityB = 0
     }
     setmetatable(obj, self)
     self.__index = Upgrade
@@ -30,10 +28,8 @@ end
 
 function Upgrade:generate()
     self.upgradeA = possibleUPgrade[flr(rnd(#possibleUPgrade)) + 1]
-    self.quantityA = flr(rnd(10)) + 1
 
     self.upgradeB = possibleUPgrade[flr(rnd(#possibleUPgrade)) + 1]
-    self.quantityB = flr(rnd(10)) + 1
 end
 
 function Upgrade:display()
@@ -51,9 +47,9 @@ function Upgrade:choose()
     end
 end
 
-function Upgrade:upgradePlayer(upgrade, quantity)
+function Upgrade:upgradePlayer(upgrade)
     player.mineral = player.mineral - self.mineral
-    player[upgrade.value] = player[upgrade.value] + upgrade.baseValue * quantity
+    player[upgrade.value] = player[upgrade.value] + upgrade.baseValue
     self.mineral = flr(self.mineral * 1.5)
     self:generate()
 end

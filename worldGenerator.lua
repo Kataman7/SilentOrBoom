@@ -105,15 +105,17 @@ function generate_cave(livingTile, deadTile)
     end
 end
 
-function generate_mineral(mineralTile, chance)
-    random_initialization(chance, mineralTile, 51)
+function generate_mineral(mineralTile, chance, stoneTile)
+    if (not stoneTile) then
+        stoneTile = 51
+    end
+    random_initialization(chance, mineralTile, stoneTile)
     for i = 1, 3 do
-       next_conway_generation(mineralTile, 51, 2, 3, 3)
+       next_conway_generation(mineralTile, stoneTile, 2, 3, 3)
     end
 end
 
-function generate_dirt(dirtTile, chance, max, min, birth)
-    local stoneTile = 51
+function generate_dirt(dirtTile, chance, stoneTile, max, min, birth)
     local maxVal = max or 10
     local minVal = min or 1
     local birthVal = birth or 2
@@ -124,7 +126,7 @@ function generate_dirt(dirtTile, chance, max, min, birth)
     end
 end
 
-function vine_generation()
+function vine_generation(vineBlock)
     for i = 1, 128 do
         for j = 2, 32 do
             if (mget(i, j) == 0) then
@@ -132,7 +134,7 @@ function vine_generation()
                     if (rnd(1) < 0.2) then
                         local k = j
                         while (mget(i, k) == 0 and k < 32) do
-                            mset(i, k, 53)
+                            mset(i, k, vineBlock)
                             k+=1
                         end
                     end
@@ -194,7 +196,7 @@ function create_bunker()
     local width = 20  -- Largeur du bunker
     local height = 10  -- Hauteur du bunker
     local start_x = 50  -- Position X de départ
-    local start_y = 10  -- Position Y de départ
+    local start_y = 20  -- Position Y de départ
 
     -- Ajuste la position Y si nécessaire
     if start_y + height > 32 then
@@ -255,37 +257,57 @@ function generate_biomeA()
     clear_tilemap()
     generate_cave(51, 0)
     generate_land(56, 52, 51)
-    generate_dirt(52, 0.05)
-    generate_dirt(50, 0.05)
-    generate_dirt(49, 0.05, 2, 5)
+    generate_dirt(52, 0.05, 51)
+    generate_dirt(50, 0.05, 51)
+    generate_dirt(49, 0.05, 51, 2, 5)
     generate_mineral(54, 0.1)
     generate_mineral(55, 0.1)
     generate_mineral(34, 0.1)
-    vine_generation(52)
+    vine_generation(53)
 end
 
 function generate_biomeB()
     clear_tilemap()
     generate_cave(51, 0)
     generate_land(56, 52, 51)
-    generate_dirt(52, 0.01)
-    generate_dirt(50, 0.05)
-    generate_dirt(49, 0.01, 2, 5)
+    generate_dirt(52, 0.01, 51)
+    generate_dirt(50, 0.05, 51)
+    generate_dirt(49, 0.02, 51, 2, 5)
     generate_mineral(54, 0.1)
     generate_mineral(55, 0.1)
     generate_mineral(34, 0.1)
-    generate_mineral(57, 0.1)
-    vine_generation(52)
+    generate_mineral(57, 0.2)
+    vine_generation(53)
+end
+
+function generate_biomeC()
+    clear_tilemap()
+    generate_cave(48, 0)
+    vine_generation(24)
+
+    if player.stage > 15 then
+        create_bunker()
+        generate_boss()
+    end
+
+    generate_dirt(50, 0.06, 48)
+    generate_dirt(20, 0.06, 48)
+    generate_dirt(25, 0.08, 2, 5)
+    generate_mineral(41, 0.2, 48)
 end
 
 function generate_word()
-    generate_biomeB()
+    generate_biomeA()
 
-    
-    if player.stage>=15 then
-        create_bunker()
-        generate_boss()
-    else
-        generate_monstres()
+    if (player.stage < 10) then
+        if rnd(1) < 0.2 then
+            generate_biomeB()
+        else
+            generate_biomeA()
+        end
+    else 
+        generate_biomeC()
     end
+
+    generate_monstres()
 end
