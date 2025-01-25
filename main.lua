@@ -15,6 +15,11 @@ function _update60()
 
     gui:update()
 
+    if player.boss_tuer>=2 then
+        GUI:displayWin()
+    end
+    
+    
     if upgrade:needUpgrade() then
         upgrade:choose()
         return

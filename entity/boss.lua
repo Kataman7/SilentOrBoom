@@ -112,7 +112,7 @@ function Boss:update()
         elseif self.phase_frame == 75 then
             effects:jump(player.x + player.w / 2, player.y + player.h)
             if player.jump_c < player.jump_m then
-                player.vely = -player.jump_f
+                player.vely = -5
                 player.jump_c = player.jump_c + 1
             end
             Effects:speaker_waves(self.x + 8, self.y + self.h)
