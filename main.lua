@@ -99,7 +99,6 @@ function _draw()
     if upgrade:needUpgrade() then
         Camera:resets()
         cls(0)
-        print("test", 64, 64, 7)
         upgrade:display()
         return
     end
