@@ -204,9 +204,9 @@ end
 
 function generate_boss()
     monstres = {}
-    local boss1 = Boss:new(430, 122,0)
+    local boss1 = Boss:new(430, 222,0)
     add(monstres, boss1)
-    local boss2 = Boss:new(452, 122,boss1)
+    local boss2 = Boss:new(452, 222,boss1)
     add(monstres, boss2)  
 end
 
@@ -283,6 +283,7 @@ function generate_biomeA()
     generate_mineral(55, 0.1)
     generate_mineral(34, 0.1)
     vine_generation(53)
+    generate_monstres()
 end
 
 function generate_biomeB()
@@ -297,6 +298,7 @@ function generate_biomeB()
     generate_mineral(34, 0.1)
     generate_mineral(57, 0.2)
     vine_generation(53)
+    generate_monstres()
 end
 
 function generate_biomeC()
@@ -307,6 +309,9 @@ function generate_biomeC()
     if player.stage > 15 then
         create_bunker()
         generate_boss()
+        dcam.levier=100
+    else
+        generate_monstres()
     end
 
     generate_dirt(50, 0.06, 48)
@@ -328,6 +333,4 @@ function generate_word()
     else 
         generate_biomeC()
     end
-
-    generate_monstres()
 end
