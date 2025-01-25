@@ -17,7 +17,11 @@ function Camera:update()
    --self.y = self.y + (self.target.y - self.y) * self.lerp_factor
 
     self.x = self.target.x
-    self.y = self.target.y + self.levierY
+    if player.x<600 and player.x>300 then
+        self.y = self.target.y + self.levierY
+    else
+        self.y = self.target.y
+    end
 end
 
 function Camera:draw()

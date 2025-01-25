@@ -14,7 +14,8 @@ end
 function _update60()
 
     gui:update()
-
+    
+    
     if upgrade:needUpgrade() then
         upgrade:choose()
         return
@@ -27,6 +28,10 @@ function _update60()
     player:update()
 
     if gui.intro < 3 then
+        return
+    end
+
+    if player.boss_tuer>=2 then
         return
     end
 
@@ -79,6 +84,12 @@ function _draw()
         return
     end
 
+    if player.boss_tuer>=2 then
+        cls(0)
+        GUI:displayWin()
+        return
+    end
+
     if player.life <= 0 then
         cls(0)
         gui:displayGameOver()
@@ -88,7 +99,6 @@ function _draw()
     if upgrade:needUpgrade() then
         Camera:resets()
         cls(0)
-        print("test", 64, 64, 7)
         upgrade:display()
         return
     end

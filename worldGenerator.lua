@@ -130,7 +130,9 @@ function clear_grass()
     for i = 1, 128 do
         for j = 1, 32 do
             if (fget(mget(i, j)) == 3) then
-                mset(i, j, 0)
+                if (not fget(mget(i, j-1)) == 0) then
+                    mset(i, j, 0)
+                end
             end
         end
     end
@@ -283,6 +285,7 @@ function generate_biomeA()
     generate_mineral(55, 0.1)
     generate_mineral(34, 0.1)
     vine_generation(53)
+    clear_grass()
     generate_monstres()
 end
 
@@ -298,6 +301,7 @@ function generate_biomeB()
     generate_mineral(34, 0.1)
     generate_mineral(57, 0.2)
     vine_generation(53)
+    clear_grass()
     generate_monstres()
 end
 
@@ -309,7 +313,7 @@ function generate_biomeC()
     if player.stage > 15 then
         create_bunker()
         generate_boss()
-        dcam.levier=100
+        dcam.levier = - 10000
     else
         generate_monstres()
     end
