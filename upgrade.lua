@@ -16,7 +16,7 @@ local possibleUPgrade = {
 
 function Upgrade:new()
     local obj = {
-        mineral = 400000,
+        mineral = 5,
         upgradeA = nil,
         upgradeB = nil,
     }
