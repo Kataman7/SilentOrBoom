@@ -7,7 +7,7 @@ function Player:new()
     obj.jump_m = 4
     obj.anim_frame = 0
     obj.anim_speed = 10
-    obj.life = 100
+    obj.life = 50
     obj.mineral = 0
     obj.tntPower = 10
     obj.tntRange = 100
