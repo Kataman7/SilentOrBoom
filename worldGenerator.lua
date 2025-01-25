@@ -310,10 +310,10 @@ function generate_biomeC()
     generate_cave(48, 0)
     vine_generation(24)
 
-    if player.stage >= 15 then
+    if player.stage > 15 then
         create_bunker()
         generate_boss()
-        dcam.levierY=-30
+        dcam.levier = - 10000
     else
         generate_monstres()
     end
