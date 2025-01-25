@@ -4,7 +4,7 @@ function Player:new()
     local obj = Entity.new(self, 64, 64, 8, 8, 0.2, 0.4, 0.85, 1)
     obj.jump_f = 5
     obj.jump_c = 0
-    obj.jump_m = 3
+    obj.jump_m = 2
     obj.anim_frame = 0
     obj.anim_speed = 10
     obj.life = 50
@@ -13,8 +13,10 @@ function Player:new()
     obj.tntRange = 100
     obj.tntSpeed = 100
     obj.stage = 0
-    obj.tntDelayMax = 60 * 5
+    obj.tntDelayMax = 60 * 4
     obj.tntDelay = 0
+    obj.mineral_mult = 1
+    obj.bonus_stage = 0
     setmetatable(obj, self)
     self.__index = self
     return obj

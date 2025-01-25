@@ -316,8 +316,10 @@ function generate_biomeC()
 end
 
 function generate_word()
-
-    if (player.stage < 10) then
+    if player.bonus_stage>0 then
+        player.bonus_stage=player.bonus_stage-1
+        generate_biomeB()
+    elseif (player.stage < 10) then
         if rnd(1) < 0.2 then
             generate_biomeB()
         else

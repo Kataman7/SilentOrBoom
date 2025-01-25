@@ -1,14 +1,17 @@
 Upgrade = {}
 local possibleUPgrade = {
-    { value = "jump_f", description = "increases jump strength", baseValue = 10 },
+    { value = "jump_f", description = "increases jump strength", baseValue = 5 },
     { value = "jump_m", description = "adds an extra jump", baseValue = 1 },
     { value = "speed", description = "speed boost", baseValue = 0.3 },
     { value = "life", description = "increases health", baseValue = 25 },
     { value = "life", description = "increases health", baseValue = 25 },
     { value = "life", description = "increases health", baseValue = 25 },
-    { value = "tntPower", description = "increases tnt power", baseValue = 15 },
-    { value = "tntRange", description = "increases TNT range", baseValue = 100 },
+    { value = "tntPower", description = "increases tnt power", baseValue = 5 },
+    { value = "tntRange", description = "increases TNT range", baseValue = 50 },
     { value = "tntSpeed", description = "increases TNT speed", baseValue = -15 },
+    { value = "mineral_mult", description = "Increases minerals collected per pickup", baseValue = 1 },
+    { value = "stage", description = "Raises stage level", baseValue = 1 },
+    { value = "stage", description = "Lowers stage level", baseValue = -1 }
 }
 
 function Upgrade:new()
