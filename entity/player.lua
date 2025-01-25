@@ -25,6 +25,10 @@ end
 
 function Player:tnt()
 
+    if gui.intro < 3 then
+        return
+    end
+
     if self.tntDelay > 0 then
         return
     end
