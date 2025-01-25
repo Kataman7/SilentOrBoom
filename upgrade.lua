@@ -1,6 +1,6 @@
 Upgrade = {}
 local possibleUPgrade = {
-    { value = "jump_f", description = "increases jump strength", baseValue = 5 },
+    { value = "jump_f", description = "increases jump strength", baseValue = 2 },
     { value = "jump_m", description = "adds an extra jump", baseValue = 1 },
     { value = "speed", description = "speed boost", baseValue = 0.3 },
     { value = "life", description = "increases health", baseValue = 25 },
