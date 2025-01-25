@@ -2,7 +2,8 @@ Effects = {}
 
 function Effects:new()
     local obj = {
-        particles = {}
+        particles = {},
+        waves = {}  -- Nouvelle table pour stocker les ondes
     }
     setmetatable(obj, self)
     self.__index = self
@@ -10,25 +11,50 @@ function Effects:new()
 end
 
 function Effects:update()
+    -- Mettre à jour les particules
     for particul in all(self.particles) do
         particul:update()
+    end
+
+    -- Mettre à jour les ondes
+    for wave in all(self.waves) do
+        wave:update()
     end
 end
 
 function Effects:draw()
+    -- Dessiner les particules
     for particul in all(self.particles) do
         particul:draw()
         self:delete_if_deletable(particul)
     end
+
+    -- Dessiner les ondes
+    for wave in all(self.waves) do
+        wave:draw()
+        self:delete_if_deletable(wave)
+    end
 end
 
-function Effects:delete_if_deletable(particul)
-    if (particul.frame <= 0) then
-        particul.radius = particul.radius - 0.1
+function Effects:delete_if_deletable(obj)
+    if obj.frame <= 0 then
+        if obj.radius then  -- Si c'est une onde
+            del(self.waves, obj)
+        else  -- Si c'est une particule
+            del(self.particles, obj)
+        end
     end
+end
 
-    if (particul.frame <= 0 and particul.radius <= 1) or (particul.x > dcam.x + 64 or particul.x < dcam.x - 64 or particul.y > dcam.y + 64 or particul.y < dcam.y - 64) then
-        del(self.particles, particul)
+function Effects:speaker_waves(x, y)
+    for i = 1, 3 do  -- Générer 3 ondes concentriques
+        local radius = 5 + i * 5  -- Rayon initial
+        local speed = 0.5         -- Vitesse d'expansion
+        local color = 7           -- Couleur du cercle
+        local frame = 120          -- Durée de vie (2 secondes)
+
+        local wave = Wave:new(x, y, radius, speed, color, frame)
+        add(self.waves, wave)  -- Ajouter l'onde à la table des ondes
     end
 end
 
@@ -79,4 +105,3 @@ function Effects:blood(x, y)
         add(self.particles, particule)
     end
 end
-    
