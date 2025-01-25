@@ -81,10 +81,7 @@ function next_conway_generation(livingTile, deadTile, min, max, birth, expend)
     end
 end
 
-function generate_land()
-    local grassTile = 56
-    local dirtTile = 52
-    local stoneTile = 51
+function generate_land(grassTile, dirtTile, stoneTile)
 
     for i = 1, 128 do
         for j = 1, 10 do
@@ -101,24 +98,24 @@ function generate_land()
     end
 end
 
-function generate_cave()
-    local livingTile = 51
-    local deadTile = 0
+function generate_cave(livingTile, deadTile)
     random_initialization(0.53, livingTile, deadTile)
     for i = 1, 5 do
         next_cave_generation(livingTile, deadTile)
     end
 end
 
-function generate_mineral(mineralTile, chance)
-    random_initialization(chance, mineralTile, 51)
+function generate_mineral(mineralTile, chance, stoneTile)
+    if (not stoneTile) then
+        stoneTile = 51
+    end
+    random_initialization(chance, mineralTile, stoneTile)
     for i = 1, 3 do
-       next_conway_generation(mineralTile, 51, 2, 3, 3)
+       next_conway_generation(mineralTile, stoneTile, 2, 3, 3)
     end
 end
 
-function generate_dirt(dirtTile, chance, max, min, birth)
-    local stoneTile = 51
+function generate_dirt(dirtTile, chance, stoneTile, max, min, birth)
     local maxVal = max or 10
     local minVal = min or 1
     local birthVal = birth or 2
@@ -129,7 +126,17 @@ function generate_dirt(dirtTile, chance, max, min, birth)
     end
 end
 
-function vine_generation()
+function clear_grass()
+    for i = 1, 128 do
+        for j = 1, 32 do
+            if (fget(mget(i, j)) == 3) then
+                mset(i, j, 0)
+            end
+        end
+    end
+end
+
+function vine_generation(vineBlock)
     for i = 1, 128 do
         for j = 2, 32 do
             if (mget(i, j) == 0) then
@@ -137,7 +144,7 @@ function vine_generation()
                     if (rnd(1) < 0.2) then
                         local k = j
                         while (mget(i, k) == 0 and k < 32) do
-                            mset(i, k, 53)
+                            mset(i, k, vineBlock)
                             k+=1
                         end
                     end
@@ -159,87 +166,167 @@ end
 
 function generate_monstres()
     monstres = {}
-    for i = 1, 20 do
-        local x = flr(rnd(1280))
+
+    for i = 1, player.stage * 2 + 4 do
+        local x = flr(rnd(128 * 8))
         local zombie = Zombie:new(x, 90)
         add(monstres, zombie)
         deplacer_monstre(zombie,0)
     end
-    for i = 1, 20 do
-        local x = flr(rnd(1280))
-        local spyder = Spyder:new(x, 90)
-        add(monstres, spyder)
-        deplacer_monstre(spyder,1)
+
+    if (player.stage >= 2) then
+        for i = 1, player.stage * 2 do
+            local x = flr(rnd(128 * 8))
+            local bat = Bat:new(x, 90)
+            add(monstres, bat)
+            deplacer_monstre(bat,0)
+        end
     end
-    for i = 1, 20 do
-        local x = flr(rnd(1280))
-        local bat = Bat:new(x, 90)
-        add(monstres, bat)
-        deplacer_monstre(bat,0)
+
+    if (player.stage >= 4) then
+        for i = 1, player.stage do
+            local x = flr(rnd(128 * 8))
+            local spider = Spyder:new(x, 90)
+            add(monstres, spider)
+            deplacer_monstre(spider,0)
+        end
+    end
+
+    if (player.stage >= 6) then
+        for i=1, player.stage*2 do
+            local x = flr(rnd(128 * 8))
+            local skull = Skull:new(x, 90)
+            add(monstres, skull)
+            deplacer_monstre(skull,0)
+        end
     end
 end
 
+function generate_boss()
+    monstres = {}
+    local boss1 = Boss:new(430, 122,0)
+    add(monstres, boss1)
+    local boss2 = Boss:new(452, 122,boss1)
+    add(monstres, boss2)  
+end
+
+
 function create_bunker()
-    local size = 10  -- Taille du bunker
+    local width = 20  -- Largeur du bunker
+    local height = 10  -- Hauteur du bunker
     local start_x = 50  -- Position X de départ
-    local start_y = 10  -- Position Y de départ
+    local start_y = 20  -- Position Y de départ
 
-    -- Vérifie que les coordonnées sont valides
-    if start_y + size > 32 then
-        start_y = 32 - size  -- Ajuste la position Y pour rester dans les limites
+    -- Ajuste la position Y si nécessaire
+    if start_y + height > 32 then
+        start_y = 32 - height
     end
 
-    -- Génère le bunker avec un mur de triple épaisseur
-    for layer = 1, 3 do  -- 3 couches de mur
-        local tile = 18 + (layer - 1)  -- Tile différent pour chaque couche (19, 20, 21)
-        local offset = layer - 1  -- Décalage pour chaque couche
+    -- Génère le bunker avec trois couches de murs
+    for layer = 1, 3 do
+        local offset = layer - 1
+        local tile
 
-        -- Mur supérieur
-        for i = start_x - offset, start_x + size + offset do
-            mset(i, start_y - offset, tile)
+        -- Détermine le type de tile selon la couche
+        if layer == 1 then
+            tile = 18  -- Couche extérieure
+        elseif layer == 3 then
+            tile = 20  -- Couche intérieure
+        else
+            tile = 20  -- Couche intermédiaire
         end
 
-        -- Mur inférieur
-        for i = start_x - offset, start_x + size + offset do
-            mset(i, start_y + size + offset, tile)
+        -- Mur supérieur (toit) en bloc 19 pour toutes les couches
+        for i = start_x - offset, start_x + width + offset do
+            mset(i, start_y - offset, 19)  -- Toit en bloc 19
         end
 
-        -- Mur gauche
-        for j = start_y - offset, start_y + size + offset do
-            mset(start_x - offset, j, tile)
+        -- Mur inférieur en blocs 18 ou 20
+        for i = start_x - offset, start_x + width + offset do
+            mset(i, start_y + height + offset, tile)
         end
 
-        -- Mur droit
-        for j = start_y - offset, start_y + size + offset do
-            mset(start_x + size + offset, j, tile)
+        -- Murs gauche et droit avec motif alterné de 18 et 20
+        for j = start_y - offset, start_y + height + offset do
+            -- Mur gauche
+            if (j + layer) % 2 == 0 then
+                mset(start_x - offset, j, 18)
+            else
+                mset(start_x - offset, j, 20)
+            end
+
+            -- Mur droit
+            if (j + layer) % 2 == 0 then
+                mset(start_x + width + offset, j, 18)
+            else
+                mset(start_x + width + offset, j, 20)
+            end
         end
     end
 
-    -- Remplit l'intérieur du bunker avec du vide (tile 0)
-    for i = start_x + 1, start_x + size - 1 do
-        for j = start_y + 1, start_y + size - 1 do
+    -- Remplir l'intérieur avec du vide
+    for i = start_x + 1, start_x + width - 1 do
+        for j = start_y + 1, start_y + height - 1 do
             mset(i, j, 0)
         end
     end
 end
 
-
-function generate_word()
+function generate_biomeA()
     clear_tilemap()
-    generate_cave()
-    generate_land()
-    generate_dirt(52, 0.05)
-    generate_dirt(50, 0.05)
-    generate_dirt(49, 0.05, 2, 5)
+    generate_cave(51, 0)
+    generate_land(56, 52, 51)
+    generate_dirt(52, 0.05, 51)
+    generate_dirt(50, 0.05, 51)
+    generate_dirt(49, 0.05, 51, 2, 5)
     generate_mineral(54, 0.1)
     generate_mineral(55, 0.1)
     generate_mineral(34, 0.1)
-    vine_generation(52)
-    generate_monstres()
+    vine_generation(53)
+end
 
-    
+function generate_biomeB()
+    clear_tilemap()
+    generate_cave(51, 0)
+    generate_land(56, 52, 51)
+    generate_dirt(52, 0.01, 51)
+    generate_dirt(50, 0.05, 51)
+    generate_dirt(49, 0.02, 51, 2, 5)
+    generate_mineral(54, 0.1)
+    generate_mineral(55, 0.1)
+    generate_mineral(34, 0.1)
+    generate_mineral(57, 0.2)
+    vine_generation(53)
+end
 
-    if player.stage==20 then
+function generate_biomeC()
+    clear_tilemap()
+    generate_cave(48, 0)
+    vine_generation(24)
+
+    if player.stage > 15 then
         create_bunker()
+        generate_boss()
     end
+
+    generate_dirt(50, 0.06, 48)
+    generate_dirt(20, 0.06, 48)
+    generate_dirt(25, 0.08, 2, 5)
+    generate_mineral(41, 0.2, 48)
+end
+
+function generate_word()
+    generate_biomeA()
+
+    if (player.stage < 10) then
+        if rnd(1) < 0.2 then
+            generate_biomeB()
+        else
+            generate_biomeA()
+        end
+    else 
+        generate_biomeC()
+    end
+
+    generate_monstres()
 end

@@ -1,13 +1,15 @@
 function _init()
     player = Player:new()
     monstres = {}
+    tirs = {}
     dcam = Camera:new()
     transition = Transition:new(60, "test...")
     effects = Effects:new()
-    generate_monstres()
     tnts = {}
     upgrade = Upgrade:new()
     upgrade:generate()
+    gui = GUI:new()
+    music(0, -1, true)
 end
 
 function _update60()
@@ -17,9 +19,14 @@ function _update60()
         return
     end
 
+    if player.life <= 0 then
+        return
+    end
+
     player:update()
     dcam:update()
     effects:update()
+    gui:update()
 
     for i = #tnts, 1, -1 do
         local tnt = tnts[i]
@@ -44,12 +51,33 @@ function _update60()
             del(monstres, monstre)
         end
     end
+
+    for i = #tirs, 1, -1 do
+        local tir = tirs[i]
+        tir:update()
+        if tir.sprite == 0 then
+            del(tirs, tir)
+        end
+    end
+
+    if not stat(57) then
+        music(12, -1, true)
+    end
+    
 end
 
 function _draw()
 
-    if upgrade:needUpgrade() then
+    if player.life <= 0 then
         cls(0)
+        gui:displayGameOver()
+        return
+    end
+
+    if upgrade:needUpgrade() then
+        Camera:resets()
+        cls(0)
+        print("test", 64, 64, 7)
         upgrade:display()
         return
     end
@@ -65,10 +93,15 @@ function _draw()
     for monstre in all(monstres) do
         monstre:draw()
     end
-    effects:draw()
+    for tir in all(tirs) do
+        tir:draw()
+    end
     map()
+    effects:draw()
 
     for tnt in all(tnts) do
         tnt:draw()
     end
+
+    gui:draw()
 end

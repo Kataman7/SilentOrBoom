@@ -36,7 +36,7 @@ function Effects:explosion(x, y)
     for i = 1, 20 do
         local angle = rnd(1) * 2 * 3.14159
         local speed = rnd(1) * 2
-        local radius = rnd(1) * 5
+        local radius = rnd(1) * 7
         local color = rnd({1,2,3,4,5,6,7,8,9,10,11,13,14,15})
         local particule = Particul:new(x, y, radius, cos(angle) * speed, sin(angle) * speed, color)
         add(self.particles, particule)
@@ -70,9 +70,9 @@ function Effects:jump(x, y)
 end
 
 function Effects:blood(x, y)
-    for i = 1, 50 do
+    for i = 1, 15 do
         local angle = rnd(1) * 1 * 3.14159 + 3.14159 -- Orienting particles to the left
-        local speed = rnd(1) * 1
+        local speed = rnd(1)
         local radius = rnd(1) * 1
         local color = rnd({8,8,8,2,2,13,14})
         local particule = Particul:new(x, y, radius, cos(angle) * speed, sin(angle) * speed, color, 0.5)

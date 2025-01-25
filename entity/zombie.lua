@@ -9,8 +9,9 @@ function Zombie:new(x,y)
     obj.anim_frame = 0
     obj.anim_speed = 10
     obj.distance_detect = detection
-    obj.speed_attack = 60
-    obj.life = 15
+    obj.speed_attack = 70 - flr(player.stage / 5)
+    obj.life = 15 + player.stage * 2
+    obj.attack = 1
     setmetatable(obj, self)
     self.__index = self
     return obj
@@ -112,9 +113,9 @@ function Zombie:update()
     -- Attaque
     if self:check_entity_collision(player) then
         if self.speed_attack<=0 then
-            effects:blood(self.x,self.y)
-            self.speed_attack=60
-            player.life=player.life-1
+            effects:blood(self.x + self.w / 2, self.y + self.h)
+            self.speed_attack= 70 - flr(player.stage / 5)
+            player.life=player.life-self.attack
         end
     end
 

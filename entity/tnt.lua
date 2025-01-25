@@ -5,6 +5,8 @@ function Tnt:new(x, y, power, range, tick)
     obj.power = power
     obj.range = range
     obj.tick = tick
+    obj.anim_frame = 0
+    obj.anim_speed = 10
     setmetatable(obj, self)
     self.__index = self
     return obj
@@ -28,6 +30,31 @@ function Tnt:update()
         self.power = 0
         self.sprite = 0
     end
+
+    
+    self.anim_frame += 1
+    if self.anim_frame >= self.anim_speed then
+        self.anim_frame = 0
+        if self.sprite == 64 then
+            self.sprite = 65
+        elseif self.sprite == 64 then
+            self.sprite = 65
+        elseif self.sprite == 65 then
+            self.sprite = 66
+        elseif self.sprite == 66 then
+            self.sprite = 67
+        elseif self.sprite == 67 then
+            self.sprite = 68
+        elseif self.sprite == 68 then
+            self.sprite = 69
+        elseif self.sprite == 69 then
+            self.sprite = 70
+        elseif self.sprite == 70 then
+            self.sprite = 71
+        else
+            self.sprite = 64
+        end
+    end    
 end
 
 function Tnt:propulse(other, damage)
@@ -44,12 +71,15 @@ function Tnt:propulse(other, damage)
                 dist = 1  -- Évite la division par zéro
             end
 
-            local force = self.power * (1 - dist / self.range)
-            other.velx = other.velx + (dx / dist) * force
-            other.vely = other.vely + (dy / dist) * force
+            if not other.explosion_resistance then
+                local force = self.power * (1 - dist / self.range)
+                other.velx = other.velx + (dx / dist) * force
+                other.vely = other.vely + (dy / dist) * force
+            end
 
-            if (damage) then
-                other.life -= self.power * (1 - dist / self.range) * 2 
+            if damage then
+                other.life -= self.power * (1 - dist / self.range) * 2
+                effects:blood(other.x, other.y)
             end
 
         end
@@ -69,16 +99,17 @@ function Tnt:destroyMap()
                 local mx = center_mx + dx
                 local my = center_my + dy
                 
-                -- Vérification des limites de la map
                 if mx >= 0 and mx < 128 and my >= 0 and my < 64 then
                     
                     mineral = mget(mx, my)
 
-                    if (mineral == 34 or mineral == 55 or mineral == 57 or mineral == 41 or mineral == 54) then
+                    if fget(mget(mx, my), 2) then
                         player.mineral += 1;
                     end
 
-                    mset(mx, my, 0)
+                    if not fget(mget(mx, my), 1) then 
+                        mset(mx, my, 0)
+                    end
                 end
             end
         end
