@@ -5,6 +5,8 @@ function Tnt:new(x, y, power, range, tick)
     obj.power = power
     obj.range = range
     obj.tick = tick
+    obj.anim_frame = 0
+    obj.anim_speed = 10
     setmetatable(obj, self)
     self.__index = self
     return obj
@@ -28,6 +30,31 @@ function Tnt:update()
         self.power = 0
         self.sprite = 0
     end
+
+    
+    self.anim_frame += 1
+    if self.anim_frame >= self.anim_speed then
+        self.anim_frame = 0
+        if self.sprite == 64 then
+            self.sprite = 65
+        elseif self.sprite == 64 then
+            self.sprite = 65
+        elseif self.sprite == 65 then
+            self.sprite = 66
+        elseif self.sprite == 66 then
+            self.sprite = 67
+        elseif self.sprite == 67 then
+            self.sprite = 68
+        elseif self.sprite == 68 then
+            self.sprite = 69
+        elseif self.sprite == 69 then
+            self.sprite = 70
+        elseif self.sprite == 70 then
+            self.sprite = 71
+        else
+            self.sprite = 64
+        end
+    end    
 end
 
 function Tnt:propulse(other, damage)

@@ -183,12 +183,21 @@ function generate_monstres()
         end
     end
 
-    if (player.stage > 4) then
+    if (player.stage >= 4) then
         for i = 1, player.stage do
             local x = flr(rnd(128 * 8))
             local spider = Spyder:new(x, 90)
             add(monstres, spider)
             deplacer_monstre(spider,0)
+        end
+    end
+
+    if (player.stage >= 6) then
+        for i=1, player.stage*2 do
+            local x = flr(rnd(128 * 8))
+            local skull = Skull:new(x, 90)
+            add(monstres, skull)
+            deplacer_monstre(skull,0)
         end
     end
 end

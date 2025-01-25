@@ -1,6 +1,7 @@
 function _init()
     player = Player:new()
     monstres = {}
+    tirs = {}
     dcam = Camera:new()
     transition = Transition:new(60, "test...")
     effects = Effects:new()
@@ -51,6 +52,14 @@ function _update60()
         end
     end
 
+    for i = #tirs, 1, -1 do
+        local tir = tirs[i]
+        tir:update()
+        if tir.sprite == 0 then
+            del(tirs, tir)
+        end
+    end
+
     if not stat(57) then
         music(12, -1, true)
     end
@@ -83,6 +92,9 @@ function _draw()
     player:draw()
     for monstre in all(monstres) do
         monstre:draw()
+    end
+    for tir in all(tirs) do
+        tir:draw()
     end
     map()
     effects:draw()
