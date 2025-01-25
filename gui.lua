@@ -25,8 +25,14 @@ function GUI:new()
             x = -60,
             y = base + 24,
             valeur = player.tntDelay
+        },
+        timer = {
+            sprite = 1,
+            x = -60,
+            y = base + 32,
+            valeur = 0,
+            tic = 0
         }
-
     }
     setmetatable(obj, self)
     self.__index = GUI
@@ -38,6 +44,11 @@ function GUI:update()
     self.mineral.valeur = player.mineral
     self.stage.valeur = player.stage
     self.tntDelay.valeur = player.tntDelay
+    self.timer.tic = self.timer.tic + 1
+    if self.timer.tic >= 60 then
+        self.timer.valeur = self.timer.valeur + 1
+        self.timer.tic=0
+    end
 end
 
 function GUI:draw()
@@ -52,6 +63,8 @@ function GUI:draw()
     print(self.stage.valeur, self.stage.x + 10 + offset_x, self.stage.y + offset_y + 2, 7)
     spr(self.tntDelay.sprite, self.tntDelay.x + offset_x, self.tntDelay.y + offset_y)
     print(self.tntDelay.valeur, self.tntDelay.x + 10 + offset_x, self.tntDelay.y + offset_y + 2, 7)
+    spr(self.timer.sprite, self.timer.x + offset_x, self.timer.y + offset_y)
+    print(self.timer.valeur, self.timer.x + 10 + offset_x, self.timer.y + offset_y + 2, 7)
 
 end
 
