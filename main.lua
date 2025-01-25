@@ -3,7 +3,7 @@ function _init()
     monstres = {}
     tirs = {}
     dcam = Camera:new()
-    transition = Transition:new(60, "test...")
+    transition = Transition:new(60, "La vie était douce. Rien ne pouvait perturber ma paix intérieure. Sauf peut-être... une musique à fond venant de chez les voisins.")
     effects = Effects:new()
     tnts = {}
     upgrade = Upgrade:new()
