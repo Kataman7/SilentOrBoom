@@ -126,6 +126,16 @@ function generate_dirt(dirtTile, chance, stoneTile, max, min, birth)
     end
 end
 
+function clear_grass()
+    for i = 1, 128 do
+        for j = 1, 32 do
+            if (fget(mget(i, j)) == 3) then
+                mset(i, j, 0)
+            end
+        end
+    end
+end
+
 function vine_generation(vineBlock)
     for i = 1, 128 do
         for j = 2, 32 do
