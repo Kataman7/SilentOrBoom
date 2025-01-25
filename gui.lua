@@ -12,7 +12,9 @@ function GUI:new()
             sprite = 6,
             x = -60,
             y = base + 8,
-            valeur = player.mineral
+            valeur = player.mineral,
+            anim_frame = 0,
+            anim_speed = 120
         },
         stage = {
             sprite = 23,
@@ -21,13 +23,15 @@ function GUI:new()
             valeur = player.stage
         },
         tntDelay = {
-            sprite = 4,
+            sprite = 64,
             x = -60,
             y = base + 24,
-            valeur = player.tntDelay
+            valeur = player.tntDelay,
+            anim_frame = 0,
+            anim_speed = 10
         },
         timer = {
-            sprite = 1,
+            sprite = 4,
             x = -60,
             y = base + 32,
             valeur = 0,
@@ -48,6 +52,45 @@ function GUI:update()
     if self.timer.tic >= 60 then
         self.timer.valeur = self.timer.valeur + 1
         self.timer.tic=0
+    end
+    self.mineral.anim_frame = self.mineral.anim_frame + 1
+    if self.mineral.anim_frame >= self.mineral.anim_speed then
+        self.mineral.anim_frame = 0
+        if self.mineral.sprite == 6 then
+            self.mineral.sprite = 7
+        elseif self.mineral.sprite == 7 then
+            self.mineral.sprite = 8
+        else
+            self.mineral.sprite = 6
+        end
+    end
+    
+    self.tntDelay.anim_frame += 1
+    if self.tntDelay.anim_frame >= self.tntDelay.anim_speed then
+        self.tntDelay.anim_frame = 0
+        if self.tntDelay.sprite == 64 then
+            self.tntDelay.sprite = 65
+        elseif self.tntDelay.sprite == 64 then
+            self.tntDelay.sprite = 65
+        elseif self.tntDelay.sprite == 65 then
+            self.tntDelay.sprite = 66
+        elseif self.tntDelay.sprite == 66 then
+            self.tntDelay.sprite = 67
+        elseif self.tntDelay.sprite == 67 then
+            self.tntDelay.sprite = 68
+        elseif self.tntDelay.sprite == 68 then
+            self.tntDelay.sprite = 69
+        elseif self.tntDelay.sprite == 69 then
+            self.tntDelay.sprite = 70
+        elseif self.tntDelay.sprite == 70 then
+            self.tntDelay.sprite = 71
+        else
+            self.tntDelay.sprite = 64
+        end
+    end  
+    
+    if self.tntDelay.valeur>0 then
+        self.tntDelay.sprite=64
     end
 end
 
