@@ -313,7 +313,7 @@ function generate_biomeC()
     if player.stage > 15 then
         create_bunker()
         generate_boss()
-        dcam.levier = - 10000
+        dcam.levierY=-30
     else
         generate_monstres()
     end
@@ -325,7 +325,7 @@ function generate_biomeC()
 end
 
 function generate_word()
-    if player.bonus_stage>0 then
+    --[[if player.bonus_stage>0 then
         player.bonus_stage=player.bonus_stage-1
         generate_biomeB()
     elseif (player.stage < 10) then
@@ -336,5 +336,9 @@ function generate_word()
         end
     else 
         generate_biomeC()
-    end
+    end]]
+    generate_biomeC()
+    create_bunker()
+    generate_boss()
+    dcam.levierY=-30
 end

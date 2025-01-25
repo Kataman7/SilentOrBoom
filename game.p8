@@ -3,6 +3,7 @@ version 42
 __lua__
 #include particul/effects.lua
 #include particul/particul.lua
+#include particul/wave.lua
 #include transition.lua
 #include entity/entity.lua
 #include entity/tnt.lua

@@ -161,3 +161,8 @@ function GUI:displayIntro()
         print("determined to reclaim it.", 0, 84, 7)  -- 104 - 20
     end
 end
+
+function GUI:displayWin()
+    dcam:resets()
+    print("YOU WIN", 50, 64, 7)
+end

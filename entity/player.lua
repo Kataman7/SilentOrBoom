@@ -12,11 +12,12 @@ function Player:new()
     obj.tntPower = 10
     obj.tntRange = 100
     obj.tntSpeed = 100
-    obj.stage = 16
-    obj.tntDelayMax = 5 * 4
-    obj.tntDelay = 0
+    obj.stage = 0
+    obj.tntDelayMax = 60 * 4
+    obj.tntDelay = obj.tntDelayMax
     obj.mineral_mult = 1
     obj.bonus_stage = 0
+    obj.boss_tuer = 0
     setmetatable(obj, self)
     self.__index = self
     return obj

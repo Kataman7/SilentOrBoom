@@ -3,7 +3,7 @@ Boss = Entity:new()
 function Boss:new(x,y,boss)
     local speed = 0.14
     local detection = 1000
-    local obj = Entity.new(self, x, y, 48, 16, speed, 0.2, 0.85, 45)
+    local obj = Entity.new(self, x, y, 58, 16, speed, 0.2, 0.85, 45)
     obj.jump_f = 4
     obj.jump_c = 0
     obj.anim_frame = 0
@@ -22,16 +22,16 @@ function Boss:new(x,y,boss)
 end
 
 function Boss:control()
-    if player.x<480 then
+    if player.x<480 or #monstres==1 then
         if self.x<player.x-1 then
             self.velx = self.velx + self.speed
         elseif self.x>player.x+1 then
             self.velx = self.velx - self.speed
         end
     else
-        if self.x+32<player.x-1 then
+        if self.x+42<player.x-1 then
             self.velx = self.velx + self.speed
-        elseif self.x+32>player.x+1 then
+        elseif self.x+42>player.x+1 then
             self.velx = self.velx - self.speed
         end
     end
@@ -52,6 +52,7 @@ function Boss:update()
     -- Mort
     if self.life==0 then
         self.sprite=0
+        player.boss_tuer=player.boss_tuer+1
         return
     end
 
@@ -76,7 +77,7 @@ function Boss:update()
     end
 
     if self.boss~=0 then
-        self.x=self.boss.x+32
+        self.x=self.boss.x+42
         self.y=self.boss.y
         return
     end
@@ -108,6 +109,13 @@ function Boss:update()
             self.vely = 0 -- Arrêt en haut
         elseif self.phase_frame > 70 and self.phase_frame<75 then
             self.vely = self.jump_f -- Descente
+        elseif self.phase_frame == 75 then
+            effects:jump(player.x + player.w / 2, player.y + player.h)
+            if player.jump_c < player.jump_m then
+                player.vely = -player.jump_f
+                player.jump_c = player.jump_c + 1
+            end
+            Effects:speaker_waves(self.x + 8, self.y + self.h)
         elseif self.phase_frame > 85 then
             self.phase_frame = 0 -- Réinitialisation du compteur de frame
         else
@@ -158,7 +166,7 @@ end
 
 function Boss:check_entity_collision(other)
     return self.x+4 < other.x + other.w and
-           self.x + self.w - 36 > other.x and
+           self.x + self.w - 46 > other.x and
            self.y < other.y + other.h and
            self.y + self.h > other.y
 end
