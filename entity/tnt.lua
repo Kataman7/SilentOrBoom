@@ -1,7 +1,7 @@
 Tnt = Entity:new()
 
 function Tnt:new(x, y, power, range, tick)
-    local obj = Entity.new(self, x, y, 8, 8, 0.2, 0.4, 0.85, 4)
+    local obj = Entity.new(self, x, y, 8, 8, 0.2, 0.4, 0.85, 64)
     obj.power = power
     obj.range = range
     obj.tick = tick
@@ -41,18 +41,21 @@ function Tnt:update()
             self.sprite = 65
         elseif self.sprite == 65 then
             self.sprite = 66
+            self.anim_speed = self.anim_speed - 1
         elseif self.sprite == 66 then
             self.sprite = 67
         elseif self.sprite == 67 then
             self.sprite = 68
         elseif self.sprite == 68 then
             self.sprite = 69
+            self.anim_speed = self.anim_speed - 1
         elseif self.sprite == 69 then
             self.sprite = 70
         elseif self.sprite == 70 then
             self.sprite = 71
         else
             self.sprite = 64
+            self.anim_speed = self.anim_speed - 1
         end
     end    
 end
@@ -104,7 +107,7 @@ function Tnt:destroyMap()
                     mineral = mget(mx, my)
 
                     if fget(mget(mx, my), 2) then
-                        player.mineral += 1;
+                        player.mineral += player.mineral_mult;
                     end
 
                     if not fget(mget(mx, my), 1) then 

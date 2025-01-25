@@ -40,6 +40,10 @@ end
 
 function Boss:update()
 
+    if self.boss~=0 and #monstres==1 then
+        self.boss=0
+    end
+
     -- Mort si sortie du jeu
     if self.y>300 or self.y<-100 then
         self.life=0
