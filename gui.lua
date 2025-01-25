@@ -36,7 +36,8 @@ function GUI:new()
             y = base + 32,
             valeur = 0,
             tic = 0
-        }
+        },
+        intro = 0
     }
     setmetatable(obj, self)
     self.__index = GUI
@@ -44,6 +45,13 @@ function GUI:new()
 end
 
 function GUI:update()
+    
+    if self.intro < 3 then
+        if btnp(4) or btnp(5) then
+            self.intro = self.intro + 1
+        end
+    end
+
     self.vie.valeur = player.life
     self.mineral.valeur = player.mineral
     self.stage.valeur = player.stage
@@ -119,4 +127,37 @@ function GUI:displayGameOver()
     
     dcam:resets()
     print("GAME OVER", 50, 64, 7)
+end
+
+function GUI:displayIntro()
+    dcam:resets()
+    if self.intro == 0 then
+        -- life was sweet. nothing could disturb my inner peace. except, perhaps... blasting music from the neighbors.
+        print("life was sweet.", 0, 44, 7)  -- 64 - 20
+        print("nothing could disturb", 0, 52, 7)  -- 72 - 20
+        print("my inner peace.", 0, 60, 7)  -- 80 - 20
+        print("except, perhaps...", 0, 68, 7)  -- 88 - 20
+        print("blasting music from", 0, 76, 8)  -- 96 - 20
+        print("the neighbors.", 0, 84, 8)  -- 104 - 20
+    elseif self.intro == 1 then
+        -- their music was so loud it woke up my cat, my plants, and even my old memories of metal festivals. that was the last straw.
+        print("their music was so loud", 0, 44, 7)  -- 64 - 20
+        print("it woke up my cat,", 0, 52, 7)  -- 72 - 20
+        print("my plants, and even", 0, 60, 7)  -- 80 - 20
+        print("my old memories of", 0, 68, 7)  -- 88 - 20
+        print("metal festivals.", 0, 76, 7)  -- 96 - 20
+        print("that was the last straw.", 0, 84, 7)  -- 104 - 20
+    elseif self.intro == 2 then
+        -- i brought out my tnt. not out of anger, but out of necessity. because silence is a right, and i was determined to reclaim it.
+        print("i brought out my ", 0, 44, 7)  -- 64 - 20
+        print("tnt", 66, 44, 8)  -- "TNT" en rouge
+        print(".", 78, 44, 7)  -- 64 - 20
+        print("not out of anger,", 0, 52, 7)  -- 72 - 20
+        print("but out of necessity.", 0, 60, 7)  -- 80 - 20
+        print("because ", 0, 68, 7)  -- 88 - 20
+        print("silence", 31, 68, 12)  -- "silence" en bleu
+        print(" is a", 58, 68, 7)  -- 88 - 20
+        print("right, and i was", 0, 76, 7)  -- 96 - 20
+        print("determined to reclaim it.", 0, 84, 7)  -- 104 - 20
+    end
 end
