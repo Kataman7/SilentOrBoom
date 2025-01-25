@@ -14,7 +14,7 @@ function GUI:new()
             y = base + 8,
             valeur = player.mineral,
             anim_frame = 0,
-            anim_speed = 120
+            anim_speed = 60
         },
         stage = {
             sprite = 23,
@@ -60,6 +60,10 @@ function GUI:update()
             self.mineral.sprite = 7
         elseif self.mineral.sprite == 7 then
             self.mineral.sprite = 8
+        elseif self.mineral.sprite == 8 then
+            self.mineral.sprite = 9
+        elseif self.mineral.sprite == 9 then
+            self.mineral.sprite = 22
         else
             self.mineral.sprite = 6
         end
