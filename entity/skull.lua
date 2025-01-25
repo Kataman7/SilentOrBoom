@@ -1,31 +1,45 @@
-Spyder = Entity:new()
+Skull = Entity:new()
 
-function Spyder:new(x,y)
+function Skull:new(x,y)
     local speed = rnd(0.005)+0.13
     local detection = rnd(10)+100
-    local obj = Entity.new(self, x, y, 8, 8, speed, 0.2, 0.85, 13)
-    obj.jump_f = 3
+    local securite = rnd(5)+50
+    local obj = Entity.new(self, x, y, 8, 8, speed, 0.2, 0.85, 28)
+    obj.jump_f = 2
     obj.jump_c = 0
     obj.anim_frame = 0
     obj.anim_speed = 10
     obj.distance_detect = detection
-    obj.speed_attack = 70 - flr(player.stage / 5)
-    obj.life=15 + player.stage
-    obj.attack = 1 + flr(player.stage / 10)
+    obj.speed_attack = 180 - player.stage
+    obj.life = 15 + player.stage * 2
+    obj.attack = 1 + player.stage
+    obj.distance_securite = securite
     setmetatable(obj, self)
     self.__index = self
     return obj
 end
 
-function Spyder:control()
-    if self:get_distance_to(player)<self.distance_detect then
+function Skull:control()
+    if self:get_distance_to(player)<self.distance_detect and self:get_distance_to(player)>self.distance_securite then
         if self.x<player.x-1 then
             self.velx = self.velx + self.speed
         elseif self.x>player.x+1 then
             self.velx = self.velx - self.speed
         else
             if self.jump_c < 1 then
-                self.vely = self.jump_f
+                self.vely = -self.jump_f
+                self.jump_c = self.jump_c + 1
+            end
+        end
+    end
+    if self:get_distance_to(player)<self.distance_securite+1 then
+        if self.x<player.x-1 then
+            self.velx = self.velx - self.speed
+        elseif self.x>player.x+1 then
+            self.velx = self.velx + self.speed
+        else
+            if self.jump_c < 1 then
+                self.vely = -self.jump_f
                 self.jump_c = self.jump_c + 1
             end
         end
@@ -33,11 +47,11 @@ function Spyder:control()
 end
 
 
-function Spyder:update()
+function Skull:update()
     self:control()
 
     --Copie de entity pour pouvoir sauter au bon moment
-    self.vely = self.vely - self.gravity
+    self.vely = self.vely + self.gravity
     local new_y = self.y + self.vely
 
     if not self:check_collision(self.x, new_y) then
@@ -61,7 +75,7 @@ function Spyder:update()
                 self.velx = self.velx * -0.5
             elseif self:get_distance_to(player)<self.distance_detect then
                 if self.jump_c < 1 then
-                    self.vely = self.jump_f
+                    self.vely = -self.jump_f
                     self.jump_c = self.jump_c + 1
                 end
             else
@@ -97,25 +111,24 @@ function Spyder:update()
         self.anim_frame += 1
         if self.anim_frame >= self.anim_speed then
             self.anim_frame = 0
-            if self.sprite == 14 then
-                self.sprite = 15
+            if self.sprite == 29 then
+                self.sprite = 30
             else
-                self.sprite = 14
+                self.sprite = 29
             end
         end    
         effects:walk(self.x + self.w / 2, self.y + self.h)
     else
         if self.vely==0 and self.velx==0 then
-            self.sprite = 13
+            self.sprite = 28
         end
     end
 
     -- Attaque
-    if self:check_entity_collision(player) then
+    if self:get_distance_to(player)<self.distance_detect then
         if self.speed_attack<=0 then
-            effects:blood(self.x,self.y)
-            self.speed_attack= 70 - flr(player.stage / 5)
-            player.life=player.life-self.attack
+            add(tirs,Tir:new(self.x,self.y))
+            self.speed_attack=180 - player.stage
         end
     end
 

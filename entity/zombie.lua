@@ -114,7 +114,7 @@ function Zombie:update()
     if self:check_entity_collision(player) then
         if self.speed_attack<=0 then
             effects:blood(self.x,self.y)
-            self.speed_attack=60
+            self.speed_attack= 70 - flr(player.stage / 5)
             player.life=player.life-self.attack
         end
     end
