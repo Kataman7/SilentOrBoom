@@ -107,7 +107,7 @@ function Tnt:destroyMap()
                     mineral = mget(mx, my)
 
                     if fget(mget(mx, my), 2) then
-                        player.mineral += 1;
+                        player.mineral += player.mineral_mult;
                     end
 
                     if not fget(mget(mx, my), 1) then 
