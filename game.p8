@@ -3,7 +3,6 @@ version 42
 __lua__
 #include particul/effects.lua
 #include particul/particul.lua
-#include particul/wave.lua
 #include transition.lua
 #include entity/entity.lua
 #include entity/tnt.lua
@@ -17,7 +16,6 @@ __lua__
 #include entity/tir.lua
 #include upgrade.lua
 #include worldGenerator.lua
-#include platform.lua
 #include main.lua
 #include gui.lua
 __gfx__

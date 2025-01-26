@@ -1,6 +1,6 @@
-Spyder = Entity:new()
+Spider = Entity:new()
 
-function Spyder:new(x,y)
+function Spider:new(x,y)
     local speed = rnd(0.005)+0.13
     local detection = rnd(10)+100
     local obj = Entity.new(self, x, y, 8, 8, speed, 0.2, 0.85, 13)
@@ -17,7 +17,7 @@ function Spyder:new(x,y)
     return obj
 end
 
-function Spyder:control()
+function Spider:control()
     if self:get_distance_to(player)<self.distance_detect then
         if self.x<player.x-1 then
             self.velx = self.velx + self.speed
@@ -33,7 +33,7 @@ function Spyder:control()
 end
 
 
-function Spyder:update()
+function Spider:update()
     self:control()
 
     --Copie de entity pour pouvoir sauter au bon moment
