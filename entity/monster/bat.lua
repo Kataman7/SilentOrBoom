@@ -61,12 +61,12 @@ function Bat:update()
             self.sprite = 26
         end
     end    
-    effects:walk(self.x + self.w / 2, self.y + self.h)
+    scenes.gameLoop.effects:walk(self.x + self.w / 2, self.y + self.h)
 
     -- Attaque
     if self:check_entity_collision(player) then
         if self.speed_attack<=0 then
-            effects:blood(self.x + self.w / 2, self.y + self.h)
+            scenes.gameLoop.effects:blood(self.x + self.w / 2, self.y + self.h)
             self.speed_attack= 70 - flr(player.stage / 5)
             player.life=player.life-self.attack
         end

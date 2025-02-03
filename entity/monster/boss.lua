@@ -65,7 +65,7 @@ function Boss:update()
     -- Attaque
     if self:check_entity_collision(player) then
         if self.speed_attack<=0 then
-            effects:blood(self.x + self.w / 2, self.y + self.h)
+            scenes.gameLoop.effects:blood(self.x + self.w / 2, self.y + self.h)
             self.speed_attack=60
             player.life=player.life-3
         end
@@ -111,7 +111,7 @@ function Boss:update()
         elseif self.phase_frame > 70 and self.phase_frame<75 then
             self.vely = self.jump_f -- Descente
         elseif self.phase_frame == 75 then
-            effects:jump(player.x + player.w / 2, player.y + player.h)
+            scenes.gameLoop.effects:jump(player.x + player.w / 2, player.y + player.h)
             if player.jump_c < player.jump_m then
                 player.vely = -5
                 player.jump_c = player.jump_c + 1

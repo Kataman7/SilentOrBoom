@@ -134,5 +134,5 @@ function Monster:perform_attack()
 end
 
 function Monster:attack_effect()
-    effects:blood(self.x + self.w/2, self.y + self.h)
+    scenes.gameLoop.effects:blood(self.x + self.w/2, self.y + self.h)
 end

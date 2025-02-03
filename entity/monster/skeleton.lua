@@ -117,7 +117,7 @@ function Skull:update()
                 self.sprite = 29
             end
         end    
-        effects:walk(self.x + self.w / 2, self.y + self.h)
+        scenes.gameLoop.effects:walk(self.x + self.w / 2, self.y + self.h)
     else
         if self.vely==0 and self.velx==0 then
             self.sprite = 28
