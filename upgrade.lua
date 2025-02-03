@@ -6,6 +6,7 @@ local possibleUPgrade = {
     { value = "life", description = "increases health", baseValue = 25 },
     { value = "life", description = "increases health", baseValue = 25 },
     { value = "life", description = "increases health", baseValue = 25 },
+    { value = "life", description = "increases health", baseValue = 25 },
     { value = "tntPower", description = "increases tnt power", baseValue = 5 },
     { value = "tntRange", description = "increases TNT range", baseValue = 50 },
     { value = "tntSpeed", description = "increases TNT speed", baseValue = -15 },
@@ -21,33 +22,32 @@ function Upgrade:new()
         upgradeB = nil,
     }
     setmetatable(obj, self)
-    self.__index = Upgrade
+    self.__index = self
     return obj
-end
-
-function Upgrade:needUpgrade()
-    return player.mineral >= self.mineral
 end
 
 function Upgrade:generate()
     self.upgradeA = possibleUPgrade[flr(rnd(#possibleUPgrade)) + 1]
-
     self.upgradeB = possibleUPgrade[flr(rnd(#possibleUPgrade)) + 1]
 end
 
-function Upgrade:display()
-    local base = 20
-    print("choose an upgrade", 0, base, 7)
-    print("o : " .. self.upgradeA.description, 0, base + 8, 7)
-    print("x : " .. self.upgradeB.description, 0, base + 16, 7)
-end
-
-function Upgrade:choose()
+function Upgrade:update()
     if btnp(4) then
         self:upgradePlayer(self.upgradeA, 0)
     elseif btnp(5) then
         self:upgradePlayer(self.upgradeB, 0)
     end
+end
+
+function Upgrade:draw()
+    local base = 20
+    print("choose an upgrade", 0, base, 7)
+    print("[o] : " .. self.upgradeA.description, 0, base + 8, 7)
+    print("[x] : " .. self.upgradeB.description, 0, base + 16, 7)
+end
+
+function Upgrade:needUpgrade()
+    return player.mineral >= self.mineral
 end
 
 function Upgrade:upgradePlayer(upgrade)

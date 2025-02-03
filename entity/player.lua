@@ -1,7 +1,7 @@
 Player = Entity:new()
 
 function Player:new()
-    local obj = Entity.new(self, 64, 64, 8, 8, 0.2, 0.4, 0.85, 1)
+    local obj = Entity:new(64, 64, 8, 8, 0.2, 0.4, 0.85, 1)
     obj.jump_f = 5
     obj.jump_c = 0
     obj.jump_m = 4
@@ -53,7 +53,7 @@ function Player:control()
         self.velx = self.velx - self.speed
     end
     if btnp(2) or btnp(4) then
-        effects:jump(self.x + self.w / 2, self.y + self.h)
+        scenes.gameLoop.effects:jump(self.x + self.w / 2, self.y + self.h)
         if self.jump_c < self.jump_m then
             self.vely = -self.jump_f
             self.jump_c = self.jump_c + 1
@@ -78,11 +78,18 @@ function Player:update()
                 self.sprite = 2
             end
         end    
-        effects:walk(self.x + self.w / 2, self.y + self.h)
+        scenes.gameLoop.effects:walk(self.x + self.w / 2, self.y + self.h)
     else 
         self.sprite = 1
     end
     if self.vely == 0 then
         self.jump_c = 0
+    end
+
+    if self.y > 128 then
+        generate_word()
+        self.y = 10
+        self.x = 64
+        self.vely = 0
     end
 end

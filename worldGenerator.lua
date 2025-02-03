@@ -1,3 +1,9 @@
+function map_position(x, y)
+    x = flr(x / 8)
+    y = flr(y / 8)
+    return { x = x, y = y }
+end
+
 function clear_tilemap()
     for i = 1, 128 do
         for j = 1, 32 do
@@ -168,6 +174,7 @@ end
 
 function generate_monstres()
     monstres = {}
+    player = scenes.gameLoop.player
 
     for i = 1, player.stage * 2 + 4 do
         local x = flr(rnd(128 * 8))
@@ -306,6 +313,8 @@ function generate_biomeB()
 end
 
 function generate_biomeC()
+    player = scenes.gameLoop.player
+
     clear_tilemap()
     generate_cave(48, 0)
     vine_generation(24)
@@ -325,6 +334,8 @@ function generate_biomeC()
 end
 
 function generate_word()
+    player = scenes.gameLoop.player
+
     if player.bonus_stage>0 then
         player.bonus_stage=player.bonus_stage-1
         generate_biomeB()
