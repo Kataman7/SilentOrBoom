@@ -1,7 +1,7 @@
 EndText = Gui:new()
 
 function EndText:new()
-    local obj = Gui.new(self)
+    local obj = Gui:new()
 
     obj.win = false
 

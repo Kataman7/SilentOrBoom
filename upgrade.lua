@@ -8,7 +8,6 @@ local possibleUPgrade = {
     { value = "life", description = "increases health", baseValue = 25 },
     { value = "life", description = "increases health", baseValue = 25 },
     { value = "tntPower", description = "increases tnt power", baseValue = 5 },
-    { value = "tntRange", description = "increases TNT range", baseValue = 50 },
     { value = "tntSpeed", description = "increases TNT speed", baseValue = -15 },
     { value = "mineral_mult", description = "Increases minerals collected per pickup", baseValue = 1 },
     { value = "stage", description = "Raises stage level", baseValue = 1 },

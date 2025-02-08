@@ -8,52 +8,32 @@ function GameLoop:new()
 end
 
 function GameLoop:init()
-    self.player = Player:new()
-    self.camera = Camera:new(self.player)
-    self.gui = Gui:new()
-    self.effects = Effects:new()
-    self.tnts = {}
+    self.gui = GameStats:new()
     self.enemies = {}
     self.bullets = {}
 end
 
 function GameLoop:update()
-    self.player:update()
+    player:update()
     self.gui:update()
-    self.camera:update()
-    self.effects:update()
+    dcam:update()
+    effects:update()
 
-    updateEntities(self.tnts)
+    updateEntities(tnts)
     updateEntities(self.enemies)
     updateEntities(self.bullets)
 end
 
 function GameLoop:draw()
-    self.camera:draw()
+    dcam:draw()
     cls(12)
-    self.player:draw()
+    player:draw()
     drawEntities(self.enemies)
     drawEntities(self.bullets)
-    drawEntities(self.tnts)
+    drawEntities(tnts)
     map()
-    drawEntities(self.effects)
+    effects:draw()
     self.gui:draw()
-end
-
-function updateEntities(array)
-    for i = #array, 1, -1 do
-        local entity = array[i]
-        entity:update()
-        if entity.sprite == 0 then
-            del(array, entity)
-        end
-    end
-end
-
-function drawEntities(array)
-    for entity in all(array) do
-        entity:draw()
-    end
 end
 
 

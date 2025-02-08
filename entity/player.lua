@@ -10,7 +10,6 @@ function Player:new()
     obj.life = 50
     obj.mineral = 0
     obj.tntPower = 10
-    obj.tntRange = 100
     obj.tntSpeed = 100
     obj.stage = 0
     obj.tntDelayMax = 60*2
@@ -25,15 +24,11 @@ end
 
 function Player:tnt()
 
-    if gui.intro < 3 then
-        return
-    end
-
     if self.tntDelay > 0 then
         return
     end
 
-    local tnt = Tnt:new(self.x, self.y, self.tntPower, self.tntRange, self.tntSpeed)
+    local tnt = Tnt:new(self.x, self.y, self.tntPower, self.tntSpeed)
     tnt.vely = -2;
     add(tnts, tnt)
     self.tntDelay = self.tntDelayMax
@@ -53,7 +48,7 @@ function Player:control()
         self.velx = self.velx - self.speed
     end
     if btnp(2) or btnp(4) then
-        scenes.gameLoop.effects:jump(self.x + self.w / 2, self.y + self.h)
+        effects:jump(self.x + self.w / 2, self.y + self.h)
         if self.jump_c < self.jump_m then
             self.vely = -self.jump_f
             self.jump_c = self.jump_c + 1
@@ -78,7 +73,7 @@ function Player:update()
                 self.sprite = 2
             end
         end    
-        scenes.gameLoop.effects:walk(self.x + self.w / 2, self.y + self.h)
+        effects:walk(self.x + self.w / 2, self.y + self.h)
     else 
         self.sprite = 1
     end
@@ -86,10 +81,10 @@ function Player:update()
         self.jump_c = 0
     end
 
-    if self.y > 128 then
+    if self.y > 128*8 then
         generate_word()
-        self.y = 10
-        self.x = 64
+        self.y = 0
+        self.x = 64 * 8
         self.vely = 0
     end
 end

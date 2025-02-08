@@ -1,9 +1,9 @@
 Tnt = Entity:new()
 
-function Tnt:new(x, y, power, range, tick)
+function Tnt:new(x, y, power, tick)
     local obj = Entity.new(self, x, y, 8, 8, 0.2, 0.4, 0.85, 64)
     obj.power = power
-    obj.range = range
+    obj.range = power * 10
     obj.tick = tick
     obj.anim_frame = 0
     obj.anim_speed = 10
@@ -29,38 +29,15 @@ function Tnt:update()
 
         self.power = 0
         self.sprite = 0
-    end
-
-    
-    self.anim_frame += 1
-    if self.anim_frame >= self.anim_speed then
-        self.anim_frame = 0
-        if self.sprite == 64 then
-            self.sprite = 65
-        elseif self.sprite == 64 then
-            self.sprite = 65
-        elseif self.sprite == 65 then
-            self.sprite = 66
-            self.anim_speed = self.anim_speed - 1
-        elseif self.sprite == 66 then
-            self.sprite = 67
-        elseif self.sprite == 67 then
-            self.sprite = 68
-        elseif self.sprite == 68 then
-            self.sprite = 69
-            self.anim_speed = self.anim_speed - 1
-        elseif self.sprite == 69 then
-            self.sprite = 70
-        elseif self.sprite == 70 then
-            self.sprite = 71
-        else
-            self.sprite = 64
-            self.anim_speed = self.anim_speed - 1
-        end
-    end    
+    end 
 end
 
 function Tnt:propulse(other, damage)
+
+        if other == nil then
+            return
+        end
+
         local dx = other.x - self.x
         local dy = other.y - self.y
         local dist = sqrt(dx * dx + dy * dy)

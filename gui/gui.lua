@@ -12,9 +12,7 @@ function Gui:new()
 end
 
 function Gui:update()
-    print("update() must be implemented in subclas", 2)
 end
 
 function Gui:draw()
-    print("draw() must be implemented in subclass", 2)
 end
