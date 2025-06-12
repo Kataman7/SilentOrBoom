@@ -3,10 +3,11 @@ Tnt = Entity:new()
 function Tnt:new(x, y, power, tick)
     local obj = Entity.new(self, x, y, 8, 8, 0.2, 0.4, 0.85, 64)
     obj.power = power
-    obj.range = power * 10
+    obj.range = 100
     obj.tick = tick
     obj.anim_frame = 0
     obj.anim_speed = 10
+    obj.anim = TntAnim:new(true) -- Correction ici (T majuscule)
     setmetatable(obj, self)
     self.__index = self
     return obj
@@ -14,8 +15,10 @@ end
 
 function Tnt:update()
     Entity.update(self)
-
     self.tick -= 1
+    if self.anim then
+        self.anim:update()
+    end
 
     if self.tick <= 1 then
         if self.power > 0 then
@@ -32,37 +35,44 @@ function Tnt:update()
     end 
 end
 
+function Tnt:draw()
+    if self.sprite ~= 0 then
+        if self.anim then
+            spr(self.anim.sprite, self.x, self.y)
+        else
+            spr(self.sprite, self.x, self.y)
+        end
+    end
+end
+
 function Tnt:propulse(other, damage)
+    if other == nil then
+        return
+    end
 
-        if other == nil then
-            return
+    local dx = other.x - self.x
+    local dy = other.y - self.y
+    local dist = sqrt(dx * dx + dy * dy)
+
+    if dist < self.range then
+        -- Gérer le cas où la distance est nulle
+        if dist == 0 then
+            dx = 0
+            dy = -1
+            dist = 1
         end
 
-        local dx = other.x - self.x
-        local dy = other.y - self.y
-        local dist = sqrt(dx * dx + dy * dy)
-
-        if dist < self.range then
-            -- Gérer le cas où la distance est nulle
-            if dist == 0 then
-                -- Direction par défaut vers le haut
-                dx = 0
-                dy = -1
-                dist = 1  -- Évite la division par zéro
-            end
-
-            if not other.explosion_resistance then
-                local force = self.power * (1 - dist / self.range)
-                other.velx = other.velx + (dx / dist) * force
-                other.vely = other.vely + (dy / dist) * force
-            end
-
-            if damage then
-                other.life -= self.power * (1 - dist / self.range) * 2
-                effects:blood(other.x, other.y)
-            end
-
+        if not other.explosion_resistance then
+            local force = self.power -- force ne dépend plus de la distance
+            other.velx = other.velx + (dx / dist) * force
+            other.vely = other.vely + (dy / dist) * force
         end
+
+        if damage then
+            other.life -= self.power -- dégâts fixes
+            effects:blood(other.x, other.y)
+        end
+    end
 end
 
 function Tnt:destroyMap()

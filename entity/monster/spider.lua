@@ -1,126 +1,54 @@
-Spider = Entity:new()
+Spider = Monster:new()
 
-function Spider:new(x,y)
-    local speed = rnd(0.005)+0.13
-    local detection = rnd(10)+100
-    local obj = Entity.new(self, x, y, 8, 8, speed, 0.2, 0.85, 13)
-    obj.jump_f = 3
-    obj.jump_c = 0
-    obj.anim_frame = 0
-    obj.anim_speed = 10
-    obj.distance_detect = detection
-    obj.speed_attack = 70 - flr(player.stage / 5)
-    obj.life=15 + player.stage
-    obj.attack = 1 + flr(player.stage / 10)
+function Spider:new(x, y)
+    local obj = Monster.new(self, x, y, 8, 8)
+    obj.speed = rnd(0.005) + 0.13
+    obj.jump_force = 3
+    obj.detection_range = rnd(10) + 100
+    obj.attack_cooldown = 70 - flr(player.stage / 5)
+    obj.life = 15 + player.stage
+    obj.attack_damage = 1 + flr(player.stage / 10)
+    obj.sprite_idle = 13
+    obj.sprite_walk = {14, 15}
     setmetatable(obj, self)
     self.__index = self
     return obj
 end
 
-function Spider:control()
-    if self:get_distance_to(player)<self.distance_detect then
-        if self.x<player.x-1 then
+function Spider:update_ai()
+    if self:get_distance_to(player) < self.detection_range then
+        if self.x < player.x - 1 then
             self.velx = self.velx + self.speed
-        elseif self.x>player.x+1 then
+        elseif self.x > player.x + 1 then
             self.velx = self.velx - self.speed
         else
-            if self.jump_c < 1 then
-                self.vely = self.jump_f
-                self.jump_c = self.jump_c + 1
+            if self.jump_counter < 1 then
+                self.vely = self.jump_force
+                self.jump_counter = self.jump_counter + 1
             end
         end
     end
 end
 
-
-function Spider:update()
-    self:control()
-
-    --Copie de entity pour pouvoir sauter au bon moment
-    self.vely = self.vely - self.gravity
-    local new_y = self.y + self.vely
-
-    if not self:check_collision(self.x, new_y) then
-        self.y = new_y
-    else
-        self.vely = 0
-    end
-
-    self.velx = self.velx * self.frict
-    local new_x = self.x + self.velx
-    
-    if (abs(self.velx) < 0.1) then
-        self.velx = 0
-    end
-
-    if self.x ~= new_x then
-        if not self:check_collision(new_x, self.y) then
-            self.x = new_x
+function Spider:animate_walk()
+    self.anim_frame += 1
+    if self.anim_frame >= self.anim_speed then
+        self.anim_frame = 0
+        if self.sprite == self.sprite_walk[1] then
+            self.sprite = self.sprite_walk[2]
         else
-            if self.velx > 50 then
-                self.velx = self.velx * -0.5
-            elseif self:get_distance_to(player)<self.distance_detect then
-                if self.jump_c < 1 then
-                    self.vely = self.jump_f
-                    self.jump_c = self.jump_c + 1
-                end
-            else
-                self.velx = 0
-            end
+            self.sprite = self.sprite_walk[1]
         end
     end
-
-    --Réinitialisation du saut
-    if self.vely == 0 then
-        self.jump_c = 0
+    if effects and effects.walk then
+        effects:walk(self.x + self.w / 2, self.y + self.h)
     end
+end
 
-    -- Mort si sortie du jeu
-    if self.y>300 or self.y<-100 then
-        self.life=0
-    end
-
-    -- Mort
-    if self.life==0 then
-        self.sprite=0
-        return
-    end
-
-
-    -- Reduction du compteur entre deux attaques
-    if self.speed_attack>0 then
-        self.speed_attack=self.speed_attack-1
-    end
-
-    -- Animation
-    if self.velx ~= 0 and self.vely == 0 then
-        self.anim_frame += 1
-        if self.anim_frame >= self.anim_speed then
-            self.anim_frame = 0
-            if self.sprite == 14 then
-                self.sprite = 15
-            else
-                self.sprite = 14
-            end
-        end    
-        scenes.gameLoop.effects:walk(self.x + self.w / 2, self.y + self.h)
-    else
-        if self.vely==0 and self.velx==0 then
-            self.sprite = 13
-        end
-    end
-
-    -- Attaque
-    if self:check_entity_collision(player) then
-        if self.speed_attack<=0 then
-            scenes.gameLoop.effects:blood(self.x + self.w / 2, self.y + self.h)
-            self.speed_attack= 70 - flr(player.stage / 5)
-            player.life=player.life-self.attack
-        end
-    end
-
-    --Mort!
-    if (self.life<=0) then
-        self.sprite = 0
-    end
+function Spider:update_movement()
+    -- Spider saute vers le haut (gravité inversée)
+    self.vely = self.vely - self.gravity
+    self.y = self:resolve_vertical_collision(self.y + self.vely)
+    self.velx = self.velx * self.frict
+    self.x = self:resolve_horizontal_collision(self.x + self.velx)
 end

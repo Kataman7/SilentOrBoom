@@ -11,6 +11,7 @@ function GameLoop:init()
     self.gui = GameStats:new()
     self.enemies = {}
     self.bullets = {}
+    self.effects = effects -- Ajout pour accès global
 end
 
 function GameLoop:update()

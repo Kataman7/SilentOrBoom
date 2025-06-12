@@ -82,9 +82,26 @@ function Player:update()
     end
 
     if self.y > 128*8 then
-        generate_word()
+        self.stage += 1
+        if player.mineral >= 5 then -- valeur de base pour l'upgrade
+            if current_scene ~= scenes.upgradeMenu then
+                changeScene(scenes.upgradeMenu)
+            end
+        else
+            generate_world()
+            changeScene(scenes.gameLoop)
+        end
         self.y = 0
         self.x = 64 * 8
         self.vely = 0
+    end
+
+    if self.life <= 0 then
+        if current_scene ~= scenes.endScene then
+            self.life = 0
+            self.velx = 0
+            self.vely = 0
+            changeScene(scenes.endScene)
+        end
     end
 end

@@ -32,7 +32,6 @@ end
 function Monster:update()
     self:update_ai()         -- Méthode abstraite
     self:update_movement()
-    self:update_collisions()
     self:update_jump()
     self:update_death()
     self:update_animation()  -- Partiellement abstraite
@@ -134,5 +133,9 @@ function Monster:perform_attack()
 end
 
 function Monster:attack_effect()
-    scenes.gameLoop.effects:blood(self.x + self.w/2, self.y + self.h)
+    if scenes and scenes.gameLoop and scenes.gameLoop.effects then
+        scenes.gameLoop.effects:blood(self.x + self.w/2, self.y + self.h)
+    elseif effects then
+        effects:blood(self.x + self.w/2, self.y + self.h)
+    end
 end

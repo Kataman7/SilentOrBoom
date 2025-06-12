@@ -5,20 +5,18 @@ function map_position(x, y)
 end
 
 function clear_tilemap()
-    for i = 1, 128 do
-        for j = 1, 32 do
+    for i = 0, 127 do
+        for j = 0, 31 do
             mset(i, j, 0)
         end
     end
 end
 
 function random_initialization(chance, livingTile, deadTile)
-    for i = 1, 128 do
-        for j = 1, 32 do
-            if (mget(i, j) == deadTile) then
-                if rnd(1) < chance then
-                    mset(i, j, livingTile)
-                end
+    for i = 0, 127 do
+        for j = 0, 31 do
+            if mget(i, j) == deadTile and rnd(1) < chance then
+                mset(i, j, livingTile)
             end
         end
     end
@@ -26,11 +24,14 @@ end
 
 function neighbor_count(x, y, livingTile)
     local count = 0
-    for i = -1, 1 do
-        for j = -1, 1 do
-            if not (i == 0 and j == 0) then
-                if mget(x + i, y + j) == livingTile then
-                    count = count + 1
+    for dx = -1, 1 do
+        for dy = -1, 1 do
+            if not (dx == 0 and dy == 0) then
+                local nx, ny = x + dx, y + dy
+                if nx >= 0 and nx < 128 and ny >= 0 and ny < 32 then
+                    if mget(nx, ny) == livingTile then
+                        count = count + 1
+                    end
                 end
             end
         end
@@ -40,9 +41,9 @@ end
 
 function next_cave_generation(livingTile, deadTile)
     local tempGrid = {}
-    for i = 1, 128 do
+    for i = 0, 127 do
         tempGrid[i] = {}
-        for j = 1, 32 do
+        for j = 0, 31 do
             local neighbors = neighbor_count(i, j, livingTile)
             local tile = mget(i, j)
             if tile == livingTile then
@@ -52,8 +53,8 @@ function next_cave_generation(livingTile, deadTile)
             end
         end
     end
-    for i = 1, 128 do
-        for j = 1, 32 do
+    for i = 0, 127 do
+        for j = 0, 31 do
             mset(i, j, tempGrid[i][j])
         end
     end
@@ -62,15 +63,15 @@ end
 function next_conway_generation(livingTile, deadTile, min, max, birth, expend)
     local tempGrid = {}
     expend = expend or false
-    for i = 1, 128 do
+    for i = 0, 127 do
         tempGrid[i] = {}
-        for j = 1, 32 do
+        for j = 0, 31 do
             local neighbors = neighbor_count(i, j, livingTile)
             local tile = mget(i, j)
             if tile == livingTile then
                 tempGrid[i][j] = (neighbors >= min and neighbors <= max) and livingTile or deadTile
             elseif tile == deadTile then
-                if (expend) then
+                if expend then
                     tempGrid[i][j] = (neighbors >= birth) and livingTile or deadTile
                 else
                     tempGrid[i][j] = (neighbors == birth) and livingTile or deadTile
@@ -78,9 +79,9 @@ function next_conway_generation(livingTile, deadTile, min, max, birth, expend)
             end
         end
     end
-    for i = 1, 128 do
-        for j = 1, 32 do
-            if (tempGrid[i][j] == livingTile or tempGrid[i][j] == deadTile) then
+    for i = 0, 127 do
+        for j = 0, 31 do
+            if tempGrid[i][j] == livingTile or tempGrid[i][j] == deadTile then
                 mset(i, j, tempGrid[i][j])
             end
         end
@@ -195,7 +196,7 @@ function generate_monstres()
     if (player.stage >= 4) then
         for i = 1, player.stage do
             local x = flr(rnd(128 * 8))
-            local spider = Spyder:new(x, 90)
+            local spider = Spider:new(x, 90)
             add(monstres, spider)
             deplacer_monstre(spider,0)
         end
@@ -333,7 +334,7 @@ function generate_biomeC()
     generate_mineral(41, 0.2, 48)
 end
 
-function generate_word()
+function generate_world()
     if player.bonus_stage>0 then
         player.bonus_stage=player.bonus_stage-1
         generate_biomeB()

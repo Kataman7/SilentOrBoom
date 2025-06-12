@@ -50,8 +50,14 @@ function Upgrade:needUpgrade()
 end
 
 function Upgrade:upgradePlayer(upgrade)
+    if player.mineral < self.mineral then return end -- sécurité
     player.mineral = player.mineral - self.mineral
+    if player[upgrade.value] == nil then
+        player[upgrade.value] = 0
+    end
     player[upgrade.value] = player[upgrade.value] + upgrade.baseValue
     self.mineral = flr(self.mineral * 1.5)
-    self:generate()
+    if player.mineral >= self.mineral then
+        self:generate()
+    end
 end

@@ -11,7 +11,7 @@ function EndText:new()
 end
 
 function EndText:draw()
-    if self.win then
+    if self.win == true then
         print("you win", 50, 40, 7)  -- Position Y réduite pour remonter le texte
     
         -- Conclusion de l'histoire
@@ -29,5 +29,6 @@ function EndText:draw()
 end
 
 function EndText:update()
-    dcam:resets()
+    -- Suppression de l'appel à dcam:resets() qui causait le crash
+    -- Rien à faire ici, la scène de fin s'affiche normalement
 end

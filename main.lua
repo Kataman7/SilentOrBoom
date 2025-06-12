@@ -3,6 +3,7 @@ function _init()
     effects = Effects:new()
     dcam = Camera:new(player)
     tnts = {}
+    tirs = {} -- Ajout pour projectiles
 
     scenes = {
         introScene = IntroScene:new(),

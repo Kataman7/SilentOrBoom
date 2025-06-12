@@ -1,10 +1,8 @@
 EndScene = Scene:new()
 
-function EndText:new()
+function EndScene:new()
     local obj = Scene:new()
-
     obj.gui = EndText:new()
-
     setmetatable(obj, self)
     self.__index = self
     return obj

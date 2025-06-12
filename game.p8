@@ -4,6 +4,8 @@ __lua__
 #include particul/particul.lua
 #include particul/effects.lua
 #include entity/entity.lua
+#include entity/animation/animation.lua
+#include entity/animation/tntAnim.lua
 #include entity/player.lua
 #include entity/tnt.lua
 #include camera.lua
