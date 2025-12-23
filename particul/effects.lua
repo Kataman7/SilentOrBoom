@@ -38,7 +38,7 @@ function Effects:explosion(x, y)
         local speed = rnd(1) * 2
         local radius = rnd(1) * 7
         local color = rnd({1,2,3,4,5,6,7,8,9,10,11,13,14,15})
-        local particule = Particul:new(x, y, radius, cos(angle) * speed, sin(angle) * speed, color)
+        local particule = Particul:new(x, y, radius, cos(angle) * speed, sin(angle) * speed, color, 0.3)
         add(self.particles, particule)
     end
 end

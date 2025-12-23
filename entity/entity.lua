@@ -21,15 +21,15 @@ function Entity:new(x, y, w, h, speed, gravity, frict, sprite)
 end
 
 function Entity:check_collision(x, y)
-    local top_left = map_position(x, y)
-    local top_right = map_position(x + self.w - 1, y)
-    local bottom_left = map_position(x, y + self.h - 1)
-    local bottom_right = map_position(x + self.w - 1, y + self.h - 1)
+    local tx, ty = map_position(x, y)
+    local trx, try = map_position(x + self.w - 1, y)
+    local blx, bly = map_position(x, y + self.h - 1)
+    local brx, bry = map_position(x + self.w - 1, y + self.h - 1)
     local flag = 0
-    return fget(mget(top_left.x, top_left.y), flag)
-            or fget(mget(top_right.x, top_right.y), flag)
-            or fget(mget(bottom_left.x, bottom_left.y), flag)
-            or fget(mget(bottom_right.x, bottom_right.y), flag)
+    return fget(mget(tx, ty), flag)
+            or fget(mget(trx, try), flag)
+            or fget(mget(blx, bly), flag)
+            or fget(mget(brx, bry), flag)
 end
 
 function Entity:check_entity_collision(other)
@@ -78,6 +78,6 @@ function Entity:draw()
             self.orientation = true
         end
 
-        spr(self.sprite, self.x, self.y, 1, 1, self.orientation)
+        spr(self.sprite, self.x, self.y, self.w / 8, self.h / 8, self.orientation)
     end
 end

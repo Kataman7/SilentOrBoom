@@ -3,7 +3,7 @@ Tnt = Entity:new()
 function Tnt:new(x, y, power, tick)
     local obj = Entity.new(self, x, y, 8, 8, 0.2, 0.4, 0.85, 64)
     obj.power = power
-    obj.range = 100
+    obj.range = 40
     obj.tick = tick
     obj.anim_frame = 0
     obj.anim_speed = 10
@@ -23,8 +23,10 @@ function Tnt:update()
     if self.tick <= 1 then
         if self.power > 0 then
             self:propulse(player)
-            for monstre in all(monstres) do
-                self:propulse(monstre, true)
+            if scenes and scenes.gameLoop and scenes.gameLoop.enemies then
+                for monstre in all(scenes.gameLoop.enemies) do
+                    self:propulse(monstre, true)
+                end
             end
             self:destroyMap()
             effects:explosion(self.x + self.w / 2, self.y + self.h / 2)
@@ -52,6 +54,11 @@ function Tnt:propulse(other, damage)
 
     local dx = other.x - self.x
     local dy = other.y - self.y
+    
+    if abs(dx) > self.range or abs(dy) > self.range then
+        return
+    end
+
     local dist = sqrt(dx * dx + dy * dy)
 
     if dist < self.range then
@@ -63,13 +70,14 @@ function Tnt:propulse(other, damage)
         end
 
         if not other.explosion_resistance then
-            local force = self.power -- force ne dépend plus de la distance
+            local force = self.power * 0.3 * (1 - dist / self.range)
             other.velx = other.velx + (dx / dist) * force
             other.vely = other.vely + (dy / dist) * force
         end
 
         if damage then
-            other.life -= self.power -- dégâts fixes
+            local dmg = self.power * (1 - dist / self.range)
+            other.life -= dmg
             effects:blood(other.x, other.y)
         end
     end
@@ -80,25 +88,26 @@ function Tnt:destroyMap()
     -- Destruction de la map
     local center_mx = flr((self.x + 4) / 8) -- Position centre en tiles
     local center_my = flr((self.y + 4) / 8)
-    local radius = flr(self.range / 30) * 1.2 -- Rayon en tiles
+    local radius = flr(self.range / 10) -- Rayon en tiles (un peu moins que le range pixel)
+    local r2 = radius * radius
 
     for dx = -radius, radius do
-        for dy = -radius, radius do
-            -- Vérification cercle avec Pythagore
-            if dx*dx + dy*dy <= radius*radius then
-                local mx = center_mx + dx
-                local my = center_my + dy
-                
-                if mx >= 0 and mx < 128 and my >= 0 and my < 64 then
-                    
-                    mineral = mget(mx, my)
-
-                    if fget(mget(mx, my), 2) then
-                        player.mineral += player.mineral_mult;
-                    end
-
-                    if not fget(mget(mx, my), 1) then 
-                        mset(mx, my, 0)
+        local dxx = dx * dx
+        local mx = center_mx + dx
+        if mx >= 0 and mx < 128 then
+            for dy = -radius, radius do
+                if dxx + dy * dy <= r2 then
+                    local my = center_my + dy
+                    if my >= 0 and my < 64 then
+                        local tile = mget(mx, my)
+                        if tile != 0 then
+                            if fget(tile, 2) then
+                                player.mineral += player.mineral_mult
+                            end
+                            if not fget(tile, 1) then 
+                                mset(mx, my, 0)
+                            end
+                        end
                     end
                 end
             end

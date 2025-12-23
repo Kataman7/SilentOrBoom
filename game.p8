@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 42
+version 41
 __lua__
 #include particul/particul.lua
 #include particul/effects.lua
@@ -14,6 +14,7 @@ __lua__
 #include entity/monster/skeleton.lua
 #include entity/monster/spider.lua
 #include entity/monster/bat.lua
+#include entity/monster/boss.lua
 #include entity/monster/bullet.lua
 #include gui/gui.lua
 #include gui/endText.lua

@@ -30,6 +30,11 @@ function Monster:init_monster()
 end
 
 function Monster:update()
+    if self.life <= 0 then
+        self.sprite = 0
+        return
+    end
+
     self:update_ai()         -- Méthode abstraite
     self:update_movement()
     self:update_jump()
@@ -134,8 +139,8 @@ end
 
 function Monster:attack_effect()
     if scenes and scenes.gameLoop and scenes.gameLoop.effects then
-        scenes.gameLoop.effects:blood(self.x + self.w/2, self.y + self.h)
+        scenes.gameLoop.effects:blood(player.x + player.w/2, player.y + player.h/2)
     elseif effects then
-        effects:blood(self.x + self.w/2, self.y + self.h)
+        effects:blood(player.x + player.w/2, player.y + player.h/2)
     end
 end

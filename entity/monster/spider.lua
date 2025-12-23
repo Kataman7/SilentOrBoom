@@ -6,7 +6,7 @@ function Spider:new(x, y)
     obj.jump_force = 3
     obj.detection_range = rnd(10) + 100
     obj.attack_cooldown = 70 - flr(player.stage / 5)
-    obj.life = 15 + player.stage
+    obj.life = 10 + player.stage
     obj.attack_damage = 1 + flr(player.stage / 10)
     obj.sprite_idle = 13
     obj.sprite_walk = {14, 15}

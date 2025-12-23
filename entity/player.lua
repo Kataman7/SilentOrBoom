@@ -7,12 +7,12 @@ function Player:new()
     obj.jump_m = 4
     obj.anim_frame = 0
     obj.anim_speed = 10
-    obj.life = 50
+    obj.life = 100
     obj.mineral = 0
-    obj.tntPower = 10
-    obj.tntSpeed = 100
-    obj.stage = 0
-    obj.tntDelayMax = 60*2
+    obj.tntPower = 20
+    obj.tntSpeed = 80
+    obj.stage = 15
+    obj.tntDelayMax = 60
     obj.tntDelay = obj.tntDelayMax
     obj.mineral_mult = 1
     obj.bonus_stage = 0
@@ -81,19 +81,27 @@ function Player:update()
         self.jump_c = 0
     end
 
-    if self.y > 128*8 then
+    if self.y > 64*8 + 48 then
+        if self.boss_tuer >= 2 then
+            scenes.endScene.gui.win = true
+            changeScene(scenes.endScene)
+            return
+        end
         self.stage += 1
+        self.y = -32
+        -- On le replace au centre (64*8) pour être sûr qu'il atterrisse sur l'île
+        self.x = 64 * 8
+        self.vely = 2
+        
         if player.mineral >= 5 then -- valeur de base pour l'upgrade
             if current_scene ~= scenes.upgradeMenu then
                 changeScene(scenes.upgradeMenu)
             end
         else
+            -- On force un petit état de chargement si possible ou on génère
             generate_world()
             changeScene(scenes.gameLoop)
         end
-        self.y = 0
-        self.x = 64 * 8
-        self.vely = 0
     end
 
     if self.life <= 0 then

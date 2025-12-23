@@ -25,15 +25,19 @@ function changeScene(scene)
 end
 
 function updateEntities(array)
-    if #array == 0 then
-        return
-    end
-    for i = #array, 1, -1 do
+    local n = #array
+    if n == 0 then return end
+    local j = 1
+    for i = 1, n do
         local entity = array[i]
         entity:update()
-        if entity.sprite == 0 then
-            del(array, entity)
+        if entity.sprite ~= 0 then
+            array[j] = entity
+            j = j + 1
         end
+    end
+    for i = j, n do
+        array[i] = nil
     end
 end
 

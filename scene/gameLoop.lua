@@ -9,7 +9,7 @@ end
 
 function GameLoop:init()
     self.gui = GameStats:new()
-    self.enemies = {}
+    self.enemies = self.enemies or {}
     self.bullets = {}
     self.effects = effects -- Ajout pour accès global
 end

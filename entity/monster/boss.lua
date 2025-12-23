@@ -22,7 +22,8 @@ function Boss:new(x,y,boss)
 end
 
 function Boss:control()
-    if player.x<480 or #monstres==1 then
+    local enemies = scenes.gameLoop.enemies
+    if player.x<480 or #enemies==1 then
         if self.x<player.x-1 then
             self.velx = self.velx + self.speed
         elseif self.x>player.x+1 then
@@ -39,8 +40,9 @@ end
 
 
 function Boss:update()
+    local enemies = scenes.gameLoop.enemies
 
-    if self.boss~=0 and #monstres==1 then
+    if self.boss~=0 and #enemies==1 then
         self.boss=0
     end
 
@@ -50,9 +52,11 @@ function Boss:update()
     end
 
     -- Mort
-    if self.life==0 then
-        self.sprite=0
-        player.boss_tuer=player.boss_tuer+1
+    if self.life <= 0 then
+        if self.sprite != 0 then
+            self.sprite = 0
+            player.boss_tuer += 1
+        end
         return
     end
 
@@ -65,16 +69,10 @@ function Boss:update()
     -- Attaque
     if self:check_entity_collision(player) then
         if self.speed_attack<=0 then
-            scenes.gameLoop.effects:blood(self.x + self.w / 2, self.y + self.h)
+            scenes.gameLoop.effects:blood(player.x + player.w / 2, player.y + player.h / 2)
             self.speed_attack=60
             player.life=player.life-3
         end
-    end
-
-    --Mort!
-    if (self.life<=0) then
-        self.sprite = 0
-        player.boss_tuer=player.boss_tuer+1
     end
 
     if self.boss~=0 then

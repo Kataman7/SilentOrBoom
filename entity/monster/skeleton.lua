@@ -7,7 +7,7 @@ function Skull:new(x, y)
     obj.detection_range = rnd(10) + 100
     obj.distance_securite = rnd(5) + 50
     obj.attack_cooldown = 180 - player.stage
-    obj.life = 15 + player.stage * 2
+    obj.life = 12 + player.stage * 1.8
     obj.attack_damage = 1 + player.stage
     obj.sprite_idle = 28
     obj.sprite_walk = {29, 30}

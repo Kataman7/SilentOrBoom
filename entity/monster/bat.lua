@@ -5,7 +5,7 @@ function Bat:new(x, y)
     obj.speed = rnd(0.005) + 0.12
     obj.detection_range = rnd(10) + 100
     obj.attack_cooldown = 70 - flr(player.stage / 5)
-    obj.life = 15 + player.stage
+    obj.life = 8 + player.stage * 0.8
     obj.attack_damage = 1 + flr(player.stage / 2)
     obj.sprite_idle = 26
     obj.sprite_walk = {26, 27}

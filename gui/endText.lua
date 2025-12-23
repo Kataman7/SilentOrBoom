@@ -24,7 +24,7 @@ function EndText:draw()
         print("distant, nostalgic hum.", 0, 104, 7)  -- Position Y réduite
         print("peace was restored.", 0, 112, 12)  -- Position Y réduite, en bleu pour souligner l'importance
     else
-        print("game over :'(", 50, 64, 7)
+        print("game over :'(", 42, 64, 7)
     end
 end
 

@@ -8,11 +8,16 @@ function EndScene:new()
     return obj
 end
 
+function EndScene:init()
+    -- Initialisation si nécessaire
+end
+
 function EndScene:update()
     self.gui:update()
 end
 
 function EndScene:draw()
-    cls(12)
+    camera(0,0)
+    cls(0)
     self.gui:draw()
 end

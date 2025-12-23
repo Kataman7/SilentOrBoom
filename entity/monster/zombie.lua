@@ -6,7 +6,7 @@ function Zombie:new(x, y)
     obj.jump_force = 2
     obj.detection_range = rnd(10) + 100
     obj.attack_cooldown = 70 - flr(player.stage / 5)
-    obj.life = 15 + player.stage * 2
+    obj.life = 10 + player.stage * 1.5
     obj.attack_damage = 1
     obj.sprite_idle = 10
     obj.sprite_walk = {11, 12}

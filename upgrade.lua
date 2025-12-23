@@ -1,9 +1,9 @@
 Upgrade = {}
 local possibleUPgrade = {
-    { value = "jump_f", description = "increases jump strength", baseValue = 2 },
+    { value = "jump_f", description = "increases jump strength", baseValue = 0.5 },
     { value = "jump_m", description = "adds an extra jump", baseValue = 1 },
-    { value = "speed", description = "speed boost", baseValue = 0.3 },
-    { value = "life", description = "increases health", baseValue = 25 },
+    { value = "speed", description = "speed boost", baseValue = 0.05 },
+    { value = "life", description = "increases health", baseValue = 20 },
     { value = "life", description = "increases health", baseValue = 25 },
     { value = "life", description = "increases health", baseValue = 25 },
     { value = "life", description = "increases health", baseValue = 25 },
@@ -57,7 +57,4 @@ function Upgrade:upgradePlayer(upgrade)
     end
     player[upgrade.value] = player[upgrade.value] + upgrade.baseValue
     self.mineral = flr(self.mineral * 1.5)
-    if player.mineral >= self.mineral then
-        self:generate()
-    end
 end

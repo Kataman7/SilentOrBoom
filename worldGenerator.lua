@@ -1,20 +1,18 @@
+_temp_map = {}
+for i=0, 8191 do _temp_map[i] = 0 end
+
 function map_position(x, y)
-    x = flr(x / 8)
-    y = flr(y / 8)
-    return { x = x, y = y }
+    return flr(x / 8), flr(y / 8)
 end
 
 function clear_tilemap()
-    for i = 0, 127 do
-        for j = 0, 31 do
-            mset(i, j, 0)
-        end
-    end
+    memset(0x2000, 0, 0x1000) -- Lignes 0-31
+    memset(0x1000, 0, 0x1000) -- Lignes 32-63
 end
 
 function random_initialization(chance, livingTile, deadTile)
-    for i = 0, 127 do
-        for j = 0, 31 do
+    for j = 0, 63 do
+        for i = 0, 127 do
             if mget(i, j) == deadTile and rnd(1) < chance then
                 mset(i, j, livingTile)
             end
@@ -24,74 +22,84 @@ end
 
 function neighbor_count(x, y, livingTile)
     local count = 0
-    for dx = -1, 1 do
-        for dy = -1, 1 do
-            if not (dx == 0 and dy == 0) then
-                local nx, ny = x + dx, y + dy
-                if nx >= 0 and nx < 128 and ny >= 0 and ny < 32 then
-                    if mget(nx, ny) == livingTile then
-                        count = count + 1
-                    end
-                end
-            end
-        end
-    end
+    if mget(x-1, y-1) == livingTile then count += 1 end
+    if mget(x,   y-1) == livingTile then count += 1 end
+    if mget(x+1, y-1) == livingTile then count += 1 end
+    if mget(x-1, y)   == livingTile then count += 1 end
+    if mget(x+1, y)   == livingTile then count += 1 end
+    if mget(x-1, y+1) == livingTile then count += 1 end
+    if mget(x,   y+1) == livingTile then count += 1 end
+    if mget(x+1, y+1) == livingTile then count += 1 end
     return count
 end
 
 function next_cave_generation(livingTile, deadTile)
-    local tempGrid = {}
-    for i = 0, 127 do
-        tempGrid[i] = {}
-        for j = 0, 31 do
-            local neighbors = neighbor_count(i, j, livingTile)
-            local tile = mget(i, j)
-            if tile == livingTile then
-                tempGrid[i][j] = (neighbors >= 4) and livingTile or deadTile
+    for j = 0, 63 do
+        local row = j * 128
+        for i = 0, 127 do
+            local count = 0
+            if mget(i-1, j-1) == livingTile then count += 1 end
+            if mget(i,   j-1) == livingTile then count += 1 end
+            if mget(i+1, j-1) == livingTile then count += 1 end
+            if mget(i-1, j)   == livingTile then count += 1 end
+            if mget(i+1, j)   == livingTile then count += 1 end
+            if mget(i-1, j+1) == livingTile then count += 1 end
+            if mget(i,   j+1) == livingTile then count += 1 end
+            if mget(i+1, j+1) == livingTile then count += 1 end
+            
+            if mget(i, j) == livingTile then
+                _temp_map[row + i] = (count >= 4) and livingTile or deadTile
             else
-                tempGrid[i][j] = (neighbors >= 5) and livingTile or deadTile
+                _temp_map[row + i] = (count >= 5) and livingTile or deadTile
             end
         end
     end
-    for i = 0, 127 do
-        for j = 0, 31 do
-            mset(i, j, tempGrid[i][j])
+    for j = 0, 63 do
+        local row = j * 128
+        for i = 0, 127 do
+            mset(i, j, _temp_map[row + i])
         end
     end
 end
 
 function next_conway_generation(livingTile, deadTile, min, max, birth, expend)
-    local tempGrid = {}
-    expend = expend or false
-    for i = 0, 127 do
-        tempGrid[i] = {}
-        for j = 0, 31 do
-            local neighbors = neighbor_count(i, j, livingTile)
+    for j = 0, 63 do
+        local row = j * 128
+        for i = 0, 127 do
+            local count = 0
+            if mget(i-1, j-1) == livingTile then count += 1 end
+            if mget(i,   j-1) == livingTile then count += 1 end
+            if mget(i+1, j-1) == livingTile then count += 1 end
+            if mget(i-1, j)   == livingTile then count += 1 end
+            if mget(i+1, j)   == livingTile then count += 1 end
+            if mget(i-1, j+1) == livingTile then count += 1 end
+            if mget(i,   j+1) == livingTile then count += 1 end
+            if mget(i+1, j+1) == livingTile then count += 1 end
+
             local tile = mget(i, j)
             if tile == livingTile then
-                tempGrid[i][j] = (neighbors >= min and neighbors <= max) and livingTile or deadTile
+                _temp_map[row + i] = (count >= min and count <= max) and livingTile or deadTile
             elseif tile == deadTile then
-                if expend then
-                    tempGrid[i][j] = (neighbors >= birth) and livingTile or deadTile
-                else
-                    tempGrid[i][j] = (neighbors == birth) and livingTile or deadTile
-                end
+                local is_born = expend and (count >= birth) or (count == birth)
+                _temp_map[row + i] = is_born and livingTile or deadTile
+            else
+                _temp_map[row + i] = -1
             end
         end
     end
-    for i = 0, 127 do
-        for j = 0, 31 do
-            if tempGrid[i][j] == livingTile or tempGrid[i][j] == deadTile then
-                mset(i, j, tempGrid[i][j])
-            end
+    for j = 0, 63 do
+        local row = j * 128
+        for i = 0, 127 do
+            local val = _temp_map[row + i]
+            if val != -1 then mset(i, j, val) end
         end
     end
 end
 
 function generate_land(grassTile, dirtTile, stoneTile)
 
-    for i = 1, 128 do
-        for j = 1, 10 do
+    for i = 0, 127 do
+        for j = 0, 31 do
             if (mget(i, j) == stoneTile) then
                 mset(i, j, grassTile)
                 mset(i, j+1, dirtTile)
@@ -107,7 +115,7 @@ end
 
 function generate_cave(livingTile, deadTile)
     random_initialization(0.53, livingTile, deadTile)
-    for i = 1, 5 do
+    for i = 1, 3 do
         next_cave_generation(livingTile, deadTile)
     end
 end
@@ -117,7 +125,7 @@ function generate_mineral(mineralTile, chance, stoneTile)
         stoneTile = 51
     end
     random_initialization(chance, mineralTile, stoneTile)
-    for i = 1, 3 do
+    for i = 1, 2 do
        next_conway_generation(mineralTile, stoneTile, 2, 3, 3)
     end
 end
@@ -128,14 +136,12 @@ function generate_dirt(dirtTile, chance, stoneTile, max, min, birth)
     local birthVal = birth or 2
 
     random_initialization(chance, dirtTile, stoneTile)
-    for i = 1, 2 do
-        next_conway_generation(dirtTile, stoneTile, minVal, maxVal, birthVal, true)
-    end
+    next_conway_generation(dirtTile, stoneTile, minVal, maxVal, birthVal, true)
 end
 
 function clear_grass()
-    for i = 1, 128 do
-        for j = 1, 32 do
+    for i = 0, 127 do
+        for j = 0, 63 do
             if (fget(mget(i, j)) == 3) then
                 if (not fget(mget(i, j-1)) == 0) then
                     mset(i, j, 0)
@@ -146,13 +152,13 @@ function clear_grass()
 end
 
 function vine_generation(vineBlock)
-    for i = 1, 128 do
-        for j = 2, 32 do
+    for i = 0, 127 do
+        for j = 1, 63 do
             if (mget(i, j) == 0) then
                 if (fget(mget(i, j-1)) == 1) then
                     if (rnd(1) < 0.2) then
                         local k = j
-                        while (mget(i, k) == 0 and k < 32) do
+                        while (mget(i, k) == 0 and k < 64) do
                             mset(i, k, vineBlock)
                             k+=1
                         end
@@ -164,22 +170,26 @@ function vine_generation(vineBlock)
 end
 
 function deplacer_monstre(monstre,sens)
-    while monstre:check_collision(monstre.x,monstre.y) do
+    local limit = 0
+    while monstre:check_collision(monstre.x,monstre.y) and limit < 100 do
         if sens==1 then
             monstre.y=monstre.y+5
         else
             monstre.y=monstre.y-5
         end
+        limit += 1
     end
 end
 
 function generate_monstres()
-    monstres = {}
+    local monstres = {}
     tnts = {}
+    local max_y = 64 * 8
 
     for i = 1, player.stage * 2 + 4 do
         local x = flr(rnd(128 * 8))
-        local zombie = Zombie:new(x, 90)
+        local y = flr(rnd(max_y))
+        local zombie = Zombie:new(x, y)
         add(monstres, zombie)
         deplacer_monstre(zombie,0)
     end
@@ -187,7 +197,8 @@ function generate_monstres()
     if (player.stage >= 2) then
         for i = 1, player.stage * 2 do
             local x = flr(rnd(128 * 8))
-            local bat = Bat:new(x, 90)
+            local y = flr(rnd(max_y))
+            local bat = Bat:new(x, y)
             add(monstres, bat)
             deplacer_monstre(bat,0)
         end
@@ -196,7 +207,8 @@ function generate_monstres()
     if (player.stage >= 4) then
         for i = 1, player.stage do
             local x = flr(rnd(128 * 8))
-            local spider = Spider:new(x, 90)
+            local y = flr(rnd(max_y))
+            local spider = Spider:new(x, y)
             add(monstres, spider)
             deplacer_monstre(spider,0)
         end
@@ -205,7 +217,8 @@ function generate_monstres()
     if (player.stage >= 6) then
         for i=1, player.stage*2 do
             local x = flr(rnd(128 * 8))
-            local skull = Skull:new(x, 90)
+            local y = flr(rnd(max_y))
+            local skull = Skull:new(x, y)
             add(monstres, skull)
             deplacer_monstre(skull,0)
         end
@@ -215,11 +228,12 @@ function generate_monstres()
 end
 
 function generate_boss()
-    monstres = {}
+    local monstres = {}
     local boss1 = Boss:new(430, 222,0)
     add(monstres, boss1)
     local boss2 = Boss:new(452, 222,boss1)
     add(monstres, boss2)  
+    scenes.gameLoop.enemies = monstres
 end
 
 
@@ -230,8 +244,8 @@ function create_bunker()
     local start_y = 20  -- Position Y de départ
 
     -- Ajuste la position Y si nécessaire
-    if start_y + height > 32 then
-        start_y = 32 - height
+    if start_y + height > 64 then
+        start_y = 64 - height
     end
 
     -- Génère le bunker avec trois couches de murs
