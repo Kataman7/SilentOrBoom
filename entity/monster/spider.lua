@@ -30,21 +30,6 @@ function Spider:update_ai()
     end
 end
 
-function Spider:animate_walk()
-    self.anim_frame += 1
-    if self.anim_frame >= self.anim_speed then
-        self.anim_frame = 0
-        if self.sprite == self.sprite_walk[1] then
-            self.sprite = self.sprite_walk[2]
-        else
-            self.sprite = self.sprite_walk[1]
-        end
-    end
-    if effects and effects.walk then
-        effects:walk(self.x + self.w / 2, self.y + self.h)
-    end
-end
-
 function Spider:update_movement()
     -- Spider saute vers le haut (gravité inversée)
     self.vely = self.vely - self.gravity

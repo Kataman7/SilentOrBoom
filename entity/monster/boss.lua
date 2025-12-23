@@ -7,7 +7,7 @@ function Boss:new(x,y,boss)
     obj.jump_f = 4
     obj.jump_c = 0
     obj.anim_frame = 0
-    obj.anim_speed = 10
+    obj.anim_speed = 12
     obj.distance_detect = detection
     obj.speed_attack = 60
     obj.life = 100

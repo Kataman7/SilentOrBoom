@@ -13,7 +13,8 @@ function Entity:new(x, y, w, h, speed, gravity, frict, sprite)
         frict = frict or 0.9,
         sprite = sprite,
         explosion_resistance=false,
-        orientation = true
+        orientation = true,
+        fliped = false
     }
     setmetatable(obj, self)
     self.__index = self
@@ -73,11 +74,16 @@ function Entity:draw()
     if self.sprite ~= 0 then
 
         if self.velx > 0 then
-            self.orientation = false
+            self.orientation = self.fliped
         elseif self.velx < 0 then
-            self.orientation = true
+            self.orientation = not self.fliped
         end
 
-        spr(self.sprite, self.x, self.y, self.w / 8, self.h / 8, self.orientation)
+        local bob = 0
+        if abs(self.velx) > 0.1 and abs(self.vely) < 0.1 then
+            bob = sin(t() * 3) * 0.7
+        end
+
+        spr(self.sprite, self.x, self.y + bob, self.w / 8, self.h / 8, self.orientation)
     end
 end

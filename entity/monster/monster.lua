@@ -23,8 +23,7 @@ function Monster:init_monster()
     self.life = 10
     
     -- Animation
-    self.anim_frame = 0
-    self.anim_speed = 10
+    self.anim_speed = 12
     self.sprite_idle = 10
     self.sprite_walk = {11, 12}
 end
@@ -52,7 +51,15 @@ function Monster:update_ai()
 end
 
 function Monster:animate_walk()
-    error("animate_walk() must be implemented in subclass", 2)
+    if not self.anim_walk then
+        self.anim_walk = Animation:new(nil, nil, self.anim_speed, self.sprite_walk)
+    end
+    self.anim_walk:update()
+    self.sprite = self.anim_walk.sprite
+    
+    if effects and effects.walk then
+        effects:walk(self.x + self.w / 2, self.y + self.h)
+    end
 end
 
 ----------------------------------------------------------------

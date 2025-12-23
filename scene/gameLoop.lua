@@ -9,6 +9,8 @@ end
 
 function GameLoop:init()
     self.gui = GameStats:new()
+    -- On ne réinitialise pas enemies à {} ici car generate_world() 
+    -- l'a déjà rempli juste avant l'appel à changeScene.
     self.enemies = self.enemies or {}
     self.bullets = {}
     self.effects = effects -- Ajout pour accès global

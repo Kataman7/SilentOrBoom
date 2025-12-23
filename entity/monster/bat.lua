@@ -9,6 +9,7 @@ function Bat:new(x, y)
     obj.attack_damage = 1 + flr(player.stage / 2)
     obj.sprite_idle = 26
     obj.sprite_walk = {26, 27}
+    obj.anim_speed = 6 -- Animation rapide pour les ailes
     setmetatable(obj, self)
     self.__index = self
     return obj
@@ -26,21 +27,6 @@ function Bat:update_ai()
         elseif self.y > player.y + 1 then
             self.vely = self.vely - self.speed
         end
-    end
-end
-
-function Bat:animate_walk()
-    self.anim_frame += 1
-    if self.anim_frame >= self.anim_speed then
-        self.anim_frame = 0
-        if self.sprite == self.sprite_walk[1] then
-            self.sprite = self.sprite_walk[2]
-        else
-            self.sprite = self.sprite_walk[1]
-        end
-    end
-    if effects and effects.walk then
-        effects:walk(self.x + self.w / 2, self.y + self.h)
     end
 end
 

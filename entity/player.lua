@@ -1,12 +1,10 @@
 Player = Entity:new()
 
 function Player:new()
-    local obj = Entity:new(64, 64, 8, 8, 0.2, 0.4, 0.85, 1)
+    local obj = Entity:new(64, 64, 8, 8, 0.2, 0.4, 0.85, 117)
     obj.jump_f = 5
     obj.jump_c = 0
     obj.jump_m = 4
-    obj.anim_frame = 0
-    obj.anim_speed = 10
     obj.life = 100
     obj.mineral = 0
     obj.tntPower = 20
@@ -17,6 +15,10 @@ function Player:new()
     obj.mineral_mult = 1
     obj.bonus_stage = 0
     obj.boss_tuer = 0
+    obj.anim_walk = Animation:new(nil, nil, 40, {118, 119})
+    obj.fliped = true
+
+    
     setmetatable(obj, self)
     self.__index = self
     return obj
@@ -64,18 +66,11 @@ function Player:update()
     Entity.update(self)
 
     if self.velx ~= 0 and self.vely == 0 then
-        self.anim_frame += 1
-        if self.anim_frame >= self.anim_speed then
-            self.anim_frame = 0
-            if self.sprite == 2 then
-                self.sprite = 3
-            else
-                self.sprite = 2
-            end
-        end    
+        self.anim_walk:update()
+        self.sprite = self.anim_walk.sprite
         effects:walk(self.x + self.w / 2, self.y + self.h)
     else 
-        self.sprite = 1
+        self.sprite = 117
     end
     if self.vely == 0 then
         self.jump_c = 0
