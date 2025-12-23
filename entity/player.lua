@@ -11,7 +11,7 @@ function Player:new()
     obj.mineral = 0
     obj.tntPower = 20
     obj.tntSpeed = 80
-    obj.stage = 15
+    obj.stage = 0
     obj.tntDelayMax = 60
     obj.tntDelay = obj.tntDelayMax
     obj.mineral_mult = 1
